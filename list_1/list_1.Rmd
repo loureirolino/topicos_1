@@ -1,7 +1,7 @@
 ---
 title: |
   ![](www/logo-UnB.png){width=75%}  <br> </br>
-  Lista 1: Computação eficiente (dados em memória)
+  Lista 1: Computação eficiente
 subtitle: "Computação em Estatística para dados e cálculos massivos"
 author: "<b>Autor:</b> Lucas Loureiro Lino da Costa"
 affiliation: "Universidade de Brasília"
@@ -33,7 +33,7 @@ always_allow_html: true
 
 <!-- knitr config-->
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
 
 # Configurando sistema para a língua portuguesa pt-BR
 Sys.setlocale("LC_TIME", "pt_BR")
@@ -45,17 +45,20 @@ options(scipen = 999)
 
 # Informações Gerais
 
-1. Os códigos se encontram 'escondidos' e podem ser acessados ao apertar o botão **Code** na página.
-2. O comando original das questões podem ser encontradas no [github](https://github.com/loureirolino/topicos_1/blob/main/assignments/Lista_1.pdf).
-3. As pastas com arquivos baixados foram configuradas para não serem integradas ao github, para evitar subir um volume desnecessário de arquivos.
+**1.** Caso os códigos se encontram "escondidos", eles podem ser acessados ao apertar o botão **Code** na página.  
+**2.** Os códigos foram escritos usando a linguagem [R](https://www.r-project.org);  
+**3.** O comando original das questões pode ser encontradas no [github](https://github.com/loureirolino/topicos_1/blob/main/assignments/Lista_1.pdf) do autor desse HTML.  
+**4.** As pastas com arquivos baixados foram configuradas para não serem integradas ao github, para evitar subir um volume desnecessário de arquivos.
 
+<center>
 # Questões
+</center>
 
-## Questão 1: leitura eficiente de dados
+## Questão 1: leitura eficiente de dados {.tabset .tabset-fade .tabset-pills}
 
-### 1.a)
-```{r 1.a, results='asis'}
-# CUIDADO AO RODAR ESSE CHUNK, DADOS MASSIVOS!!!!
+### Resolução 1.a)
+```{r 1.a, results='asis', class.source = "fold-show"}
+### CUIDADO AO RODAR ESSE CHUNK, DADOS MASSIVOS!!!!
 
 # checando se o diretório existe e se necessário criá-lo
 dir_name = 'dados'
@@ -96,27 +99,32 @@ for (i in 1:length(entries)) {
 
 ```
 
-### 1.b)
+### Resolução 1.b)
 ```{r 1.b}
+# instalação dos pacotes casso necessário via pacman e carregamantos destes
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(vroom, tidyverse)
 
-# carregando o arquivo previamente baixado
+# carregando o arquivo previamente baixado (primeiro arquivo)
 data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
                locale = locale("br", encoding = "latin1"),
-               num_threads = 3)
-spec(data_1)
+               num_threads = 3, delim = ";")
 
-# # # carregando o arquivo diretamente da internet
-# data_1 =vroom(entries[1], locale = locale("br", encoding = "latin1"), num_threads = 3)
+# head do df
+data_1[1:10,]
+
+# carregando o arquivo diretamente da internet
+# data_1 =vroom(entries[1], locale = locale("br", encoding = "latin1"),
+#               num_threads = 3, delim = ";")
 ```
 
 
 O arquivo contendo o dicionário das variáveis pode ser encontrado no link abaixo:  
 `r xfun::embed_file("dicionario-de-dados-vacinacao.pdf")`:
 
+A mesma informação pode ser visualizada abaixo:
 
-**Descrição do Banco de dados**
+**Descrição do Conjunto de Dados**
 
 Variável | Descrição 
 ---|------------------------------------------------------------------------------
@@ -154,66 +162,70 @@ sistema_origem | ;
 
 
 
-### 1.c)
-```{r 1.c, eval=FALSE}
-# Dimensão dos arquivos separados
+### Resolução 1.c)
+```{r 1.c}
+# Dimensão dos arquivos separados (bytes para MB)
+for (file in list.files(dir_name, full.names = TRUE)){
+  print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
+}
 
-count.fields((list.files(dir_name, full.names = TRUE)[1]), sep = ';')[[1]]
-map(list.files(dir_name, full.names = TRUE)[1], count.fields, sep = ';')
 
-# Dimensão dos arquivos unificados
-sum(map(list.files(dir_name, full.names = TRUE), count.fields))
-  
-# Tamanho dos arquivos separados em MB (usando object.size caso tenhamos metadados junto os arquivos)
-map(list.files(dir_name, full.names = TRUE), object.size)
-
-# Tamanho dos arquivos unificados em MB (usando object.size caso tenhamos metadados junto os arquivos)
-sum(map(list.files(dir_name, full.names = TRUE), object.size))
+# Dimensão dos arquivos unificados (em MB)
+print(paste("Total folder dados unificado",
+            sum(sapply(map(list.files(dir_name, full.names = TRUE), file.info), function(x) x[[1]]))*(9.537*10^-7),
+            'MB'))
 ```
 
-### 1.d)
-```{r 1.d, eval=FALSE}
-# usando o arquivo previamente baixado
-data_1 = vroom(pipe(paste0('grep -w ASTRAZENECA', sort(list.files(dir_name, full.names = TRUE))[1])),
+### Resolução 1.d)
+```{r 1.d}
+# usando o arquivo previamente baixado (primeiro arquivo)
+# pegando para todas as entradas que contenha a palavra astrazeneca em todas as suas formas (case sensitive)
+data_1_slice = vroom(pipe(paste0('grep -wi astrazeneca ', sort(list.files(dir_name, full.names = TRUE))[1])),
+               col_names = names(data_1),
                locale = locale("br", encoding = "latin1"),
-               num_threads = 3)
+               num_threads = 3, delim = ";")
 
-# # puxando da internet diretamente
-# data_1 = vroom(pipe(paste0('grep -w ASTRAZENECA', entries[1])),
-#                locale = locale("br", encoding = "latin1"),
-#                num_threads = 3)
+# head do df
+data_1_slice[1:10,]
+
+# entradas únicas de vacina_fabricante_nome e vacina_nome
+unique(data_1_slice$vacina_fabricante_nome)
+unique(data_1_slice$vacina_nome)
+
 ```
 
-### 1.e)
-```{r 1.e, eval=FALSE}
+### Resolução 1.e)
+```{r 1.e, eval=FALSE, class.source = "fold-show"}
+# Criação de um df único a partir de todos os arquivos
 files = fs::dir_ls(glob = paste0(dir_name, '/', 'file_*csv'))
-data_complete = vroom(files)
+data_complete = vroom(files, locale = locale("br", encoding = "latin1"),
+               num_threads = 3, delim = ";")
 ```
 
-## Questão 2: manipulação de dados
+## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}
 
-### 2.a)
+### Resolução 2.a)
 ```{r 2.a}
 
 ```
 
-### 2.b)
+### Resolução 2.b)
 ```{r 2.b}
 
 ```
 
-### 2.c)
+### Resolução 2.c)
 ```{r 2.c}
 
 ```
 
-### 2.d)
+### Resolução 2.d)
 ```{r 2.d}
 
 ```
 
 ```{r cleanup, include=FALSE}
-rm(list = ls())
-gc()
+#rm(list = ls())
+#gc()
 ```
 
