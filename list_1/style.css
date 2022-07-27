@@ -1,3 +1,49 @@
+#main .nav-pills > li.active > a,
+#main .nav-pills > li.active > a:hover,
+#main .nav-pills > li.active > a:focus {
+    background-color: #22983B;
+}
+
+#main .nav-pills > li > a:hover {
+    background-color: #22983B;
+}
+
+h1, h2, h3, h4, h5, h6, legend {
+    color: #22983B;
+}
+
+#nav-top span.glyphicon {
+    color: #22983B;
+}
+
+#table-of-contents header {
+    color: #22983B;
+}
+
+#table-of-contents h2 {
+    background-color: #22983B;
+}
+
+#main a {
+    background-image: linear-gradient(180deg,#d64a70,#d64a70);
+    color: #c7254e;
+}
+
+a:hover {
+    color: #3d1308;
+}
+
+a:visited {
+    color: #3d1308;
+}
+
+
+h1{
+  text-align: center;
+}
+
+
+
 h1.title {
   font-size: 38px;
   font-family: "Times New Roman", Times, serif;
@@ -30,35 +76,7 @@ body{
   text-align: justify;
 }
 
-.watermark { 
-  opacity: 0.2;
-  position: fixed;
-  top: 35%;
-  left: -5%;
-  font-size: 2000%;
-  color: #00407d;
-  z-index:99;
-  /* Rotate div */
- -ms-transform: rotate(60deg); /* IE 9 */
- -webkit-transform: rotate(60deg); /* Chrome, Safari, Opera */
- transform: rotate(60deg);
-}
 
-
-@page {
-    size: A4;
-    counter-increment: page;
-    counter-reset: page 1;
-    @botton-right {
-        content: counter(page) " de " counter(pages);
-    }
-    @left {
-        margin: 0.5cm;
-    }@right {
-        margin: 0.8cm;
-    }
-    
-}
 
 #print-foot:after {
     counter-increment: page;
