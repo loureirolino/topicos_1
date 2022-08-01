@@ -6,4 +6,6 @@
 * list_1.html - arquivo em HTML;
 * www - pasta com os arquivos web extras;
 
+
 **Caso deseje visualizar o HTML gerado sem precisar baixá-lo use o link a seguir <http://htmlpreview.github.io/>, assim como o link do HTML do git.**
+
