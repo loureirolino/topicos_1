@@ -5,7 +5,7 @@ title: |
 subtitle: "Computação em Estatística para dados e cálculos massivos"
 author: "<b>Autor:</b> Lucas Loureiro Lino da Costa"
 affiliation: "Universidade de Brasília"
-date: "`r Sys.setlocale('LC_TIME', 'pt_BR'); Sys.setlocale('LC_ALL','pt_BR'); format(Sys.Date(), '%d de %B de %Y')`"
+date: "01 de agosto de 2022"
 tags: [estatística, computação]
 output:
   rmdformats::readthedown:
@@ -33,20 +33,7 @@ always_allow_html: true
 
 
 <!-- knitr config-->
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      warning = FALSE,
-                      message = FALSE,
-                      cache = FALSE)
 
-# use apenas caso tenha problemas de econding
-# Configurando sistema para a língua portuguesa pt-BR
-# Sys.setlocale("LC_TIME", "pt_BR")
-# Sys.setlocale("LC_ALL","pt_BR")
-
-# Não utilização de notação científica:
-options(scipen = 999)
-```
 
 # Informações Gerais
 
@@ -60,7 +47,8 @@ options(scipen = 999)
 ## Questão 1: leitura eficiente de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 1.a)
-```{r 1.a, eval=FALSE}
+
+```r
 ### CUIDADO AO RODAR ESSE CHUNK, DADOS MASSIVOS!!!!
 
 # checando se o diretório existe e se necessário criá-lo
@@ -100,11 +88,11 @@ for (i in 1:length(entries)) {
     invisible()
   }
 }
-
 ```
 
 ### Resolução 1.b)
-```{r 1.b, eval=FALSE}
+
+```r
 # instalação dos pacotes casso necessário via pacman e carregamantos destes
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(vroom, tidyverse)
@@ -168,7 +156,8 @@ sistema_origem | ;
 
 
 ### Resolução 1.c)
-```{r 1.c, eval=FALSE}
+
+```r
 # Dimensão dos arquivos separados (bytes para MB)
 for (file in list.files(dir_name, full.names = TRUE)){
   print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
@@ -182,7 +171,8 @@ print(paste("Total folder dados unificado",
 ```
 
 ### Resolução 1.d)
-```{r 1.d, eval=FALSE}
+
+```r
 # usando o arquivo previamente baixado (primeiro arquivo)
 # pegando para todas as entradas que contenha a palavra astrazeneca em todas as suas formas (case sensitive)
 data_1_slice = vroom(pipe(paste0('grep -wi astrazeneca ', sort(list.files(dir_name, full.names = TRUE))[1])),
@@ -196,11 +186,11 @@ data_1_slice[1:10,]
 # entradas únicas de vacina_fabricante_nome e vacina_nome
 unique(data_1_slice$vacina_fabricante_nome)
 unique(data_1_slice$vacina_nome)
-
 ```
 
 ### Resolução 1.e)
-```{r 1.e, eval=FALSE}
+
+```r
 # Carregando todos os arquivos de uma única vez (vroom)
 files = list.files(dir_name, full.names = TRUE)
 data_complete = vroom(files, locale = locale("br",
@@ -211,27 +201,16 @@ data_complete = vroom(files, locale = locale("br",
 ## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 2.a)
-```{r 2.a}
 
-```
 
 ### Resolução 2.b)
-```{r 2.b}
 
-```
 
 ### Resolução 2.c)
-```{r 2.c}
 
-```
 
 ### Resolução 2.d)
-```{r 2.d}
 
-```
 
-```{r cleanup, include=FALSE}
-#rm(list = ls())
-#gc()
-```
+
 

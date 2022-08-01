@@ -12,6 +12,11 @@ h1, h2, h3, h4, h5, h6, legend {
     color: #22983B;
 }
 
+#content{
+  max-width: 1500px!important;
+  margin-bottom: 150px!important;
+}
+
 #nav-top span.glyphicon {
     color: #22983B;
 }
