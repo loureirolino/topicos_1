@@ -1,6 +1,6 @@
 ---
 title: |
-  ![](www/logo-UnB.png){width=75%}  <br> </br>
+  ![](www/logo-UnB.png){width=75%}  <br>
   Lista 1: Computação eficiente
 subtitle: "Computação em Estatística para dados e cálculos massivos"
 author: "<b>Autor:</b> Lucas Loureiro Lino da Costa"
@@ -39,7 +39,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       cache = FALSE)
 
-# use apenas caso tenha problemas de econding
+# use locale apenas caso tenha problemas de econding
 # Configurando sistema para a língua portuguesa pt-BR
 # Sys.setlocale("LC_TIME", "pt_BR")
 # Sys.setlocale("LC_ALL","pt_BR")
@@ -78,8 +78,6 @@ pacman::p_load(rvest)
 base_url = read_html('https://opendatasus.saude.gov.br/dataset/covid-19-vacinacao/resource/5093679f-12c3-4d6b-b7bd-07694de54173?inner_span=True')
 
 entries = base_url %>%
-  #html_nodes(xpath = '//*[@id="content"]') %>%
-  #html_nodes('ul') %>%
   html_nodes('a') %>% 
   html_attr('href')
 entries = entries[grep(pattern= '.csv', x = entries)]
@@ -110,19 +108,21 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(vroom, tidyverse, kableExtra)
 
 # carregando o arquivo previamente baixado (primeiro arquivo - AC parte 0)
-# passe o locale caso tenha problemas de enconding
-data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
-               #locale = locale("br", encoding = "latin1"),
-               num_threads = 3, delim = ";")
+if ('data_1' %in% ls() == TRUE){
+    invisible()
+  }else{
+    # use locale apenas caso tenha problemas de econding
+    data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
+                   #locale = locale("br", encoding = "latin1"),
+                   num_threads = 3, delim = ";")
+}
 
 # head do df
 knitr::kable(head(data_1)) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
                 protect_latex = TRUE,
-                position = 'center',
-                #htmltable_class = 'lightable-striped'
-                )
+                position = 'center')
 
 # carregando o arquivo diretamente da internet
 # data_1 =vroom(entries[1],
@@ -181,22 +181,36 @@ for (file in list.files(dir_name, full.names = TRUE)){
   print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
 }
 
-
 # Dimensão dos arquivos unificados (em MB)
 print(paste("Total folder dados unificado",
             sum(sapply(map(list.files(dir_name, full.names = TRUE), file.info), function(x) x[[1]]))*(9.537*10^-7),
             'MB'))
+
+# usando file.size do pacote fs
+# Dimensão dos arquivos separados (bytes para MB)
+unlist(paste(list.files(dir_name, full.names = TRUE), map(.f = utils:::format.object_size, .x = file.size(list.files(dir_name, full.names = TRUE)), units = 'Mb')))
+
+
+# usando file.size do pacote fs
+# Dimensão dos arquivos unificados (em MB)
+utils:::format.object_size(sum(file.size(list.files(dir_name, full.names = TRUE))), units = 'Mb')
 ```
 
 ### Resolução 1.d)
 ```{r 1.d}
 # usando o arquivo previamente baixado (primeiro arquivo)
 # pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)
-# passe o locale caso tenha problemas de enconding
-data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
-               col_names = names(data_1),
-               #locale = locale("br", encoding = "latin1"),
-               num_threads = 3, delim = ";")
+# use locale apenas caso tenha problemas de econdingng
+
+if ('data_1_slice' %in% ls() == TRUE){
+    invisible()
+  }else{
+    # use locale apenas caso tenha problemas de econding
+    data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
+                   col_names = names(data_1),
+                   #locale = locale("br", encoding = "latin1"),
+                   num_threads = 3, delim = ";")
+}
 
 # head do df
 knitr::kable(head(data_1_slice)) %>%
@@ -216,26 +230,24 @@ unique(data_1_slice$vacina_nome)
 ### Resolução 1.e)
 ```{r 1.e}
 # Carregando todos os arquivos de uma única vez (vroom)
-# passe o locale caso tenha problemas de enconding
 files = list.files(dir_name, full.names = TRUE)
 
-if ('data_complete' %in% ls()){
-  invisible()
+if ('data_complete' %in% ls() == TRUE){
+    invisible()
   }else{
-}
-data_complete = vroom(pipe(paste0('grep -wi Janssen ', gsub(pattern = ',', replacement = ' ', toString(files)))),
+    # use locale apenas caso tenha problemas de econding
+    data_complete = vroom(pipe(paste0('grep -wi Janssen ', gsub(pattern = ',', replacement = ' ', toString(files)))),
                       col_names = names(data_1),
                       #locale = locale("br",encoding = "latin1"),
                       num_threads = 3, delim = ";")
+}
 
 # head do df
 knitr::kable(head(data_complete)) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
                 protect_latex = TRUE,
-                position = 'center',
-                #htmltable_class = 'lightable-striped'
-                )
+                position = 'center')
 ```
 
 ## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}

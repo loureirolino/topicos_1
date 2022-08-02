@@ -1,11 +1,11 @@
 ---
 title: |
-  ![](www/logo-UnB.png){width=75%}  <br> </br>
+  ![](www/logo-UnB.png){width=75%}  <br>
   Lista 1: Computação eficiente
 subtitle: "Computação em Estatística para dados e cálculos massivos"
 author: "<b>Autor:</b> Lucas Loureiro Lino da Costa"
 affiliation: "Universidade de Brasília"
-date: "01 de agosto de 2022"
+date: "02 de agosto de 2022"
 tags: [estatística, computação]
 output:
   rmdformats::readthedown:
@@ -66,8 +66,6 @@ pacman::p_load(rvest)
 base_url = read_html('https://opendatasus.saude.gov.br/dataset/covid-19-vacinacao/resource/5093679f-12c3-4d6b-b7bd-07694de54173?inner_span=True')
 
 entries = base_url %>%
-  #html_nodes(xpath = '//*[@id="content"]') %>%
-  #html_nodes('ul') %>%
   html_nodes('a') %>% 
   html_attr('href')
 entries = entries[grep(pattern= '.csv', x = entries)]
@@ -93,23 +91,29 @@ for (i in 1:length(entries)) {
 ### Resolução 1.b)
 
 ```r
-# instalação dos pacotes casso necessário via pacman e carregamantos destes
+# instalação dos pacotes casso necessário via pacman e carregamentos destes
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(vroom, tidyverse, kableExtra)
 
 # carregando o arquivo previamente baixado (primeiro arquivo - AC parte 0)
-data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
-               #locale = locale("br", encoding = "latin1"),
-               num_threads = 3, delim = ";")
+
+if ('data_1' %in% ls()){
+    invisible()
+  }else{
+    # use apenas caso tenha problemas de econding
+    data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
+                   #locale = locale("br", encoding = "latin1"),
+                   num_threads = 3, delim = ";")
+}
+
+
 
 # head do df
 knitr::kable(head(data_1)) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
                 protect_latex = TRUE,
-                position = 'center',
-                #htmltable_class = 'lightable-striped'
-                )
+                position = 'center')
 ```
 
 <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
@@ -365,8 +369,7 @@ knitr::kable(head(data_1)) %>%
 ```
 
 
-O arquivo contendo o dicionário das variáveis pode ser encontrado no link abaixo:  
-[Dicionário](https://opendatasus.saude.gov.br/dataset/8e0c325d-2586-4b11-8925-4ba51acd6e6d/resource/a8308b58-8898-4c6d-8119-400c722c71b5/download/dicionario-de-dados-vacinacao.pdf):
+O arquivo contendo o dicionário das variáveis pode ser encontrado no link abaixo [Dicionário](https://opendatasus.saude.gov.br/dataset/8e0c325d-2586-4b11-8925-4ba51acd6e6d/resource/a8308b58-8898-4c6d-8119-400c722c71b5/download/dicionario-de-dados-vacinacao.pdf)
 
 A mesma informação pode ser visualizada abaixo:
 
@@ -417,7 +420,6 @@ for (file in list.files(dir_name, full.names = TRUE)){
   print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
 }
 
-
 # Dimensão dos arquivos unificados (em MB)
 print(paste("Total folder dados unificado",
             sum(sapply(map(list.files(dir_name, full.names = TRUE), file.info), function(x) x[[1]]))*(9.537*10^-7),
@@ -428,11 +430,18 @@ print(paste("Total folder dados unificado",
 
 ```r
 # usando o arquivo previamente baixado (primeiro arquivo)
-# pegando para todas as entradas que contenha a palavra astrazeneca em todas as suas formas (case sensitive)
-data_1_slice = vroom(pipe(paste0('grep -wi astrazeneca ', sort(list.files(dir_name, full.names = TRUE))[1])),
-               col_names = names(data_1),
-               #locale = locale("br", encoding = "latin1"),
-               num_threads = 3, delim = ";")
+# pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)
+# use apenas caso tenha problemas de econdingng
+
+if ('data_1_slice' %in% ls()){
+    invisible()
+  }else{
+    # use apenas caso tenha problemas de econding
+    data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
+                   col_names = names(data_1),
+                   #locale = locale("br", encoding = "latin1"),
+                   num_threads = 3, delim = ";")
+}
 
 # head do df
 knitr::kable(head(data_1_slice)) %>%
@@ -442,10 +451,269 @@ knitr::kable(head(data_1_slice)) %>%
                 position = 'center',
                 #htmltable_class = 'lightable-striped'
                 )
+```
 
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> document_id </th>
+   <th style="text-align:left;"> paciente_id </th>
+   <th style="text-align:right;"> paciente_idade </th>
+   <th style="text-align:left;"> paciente_dataNascimento </th>
+   <th style="text-align:left;"> paciente_enumSexoBiologico </th>
+   <th style="text-align:left;"> paciente_racaCor_codigo </th>
+   <th style="text-align:left;"> paciente_racaCor_valor </th>
+   <th style="text-align:right;"> paciente_endereco_coIbgeMunicipio </th>
+   <th style="text-align:right;"> paciente_endereco_coPais </th>
+   <th style="text-align:left;"> paciente_endereco_nmMunicipio </th>
+   <th style="text-align:left;"> paciente_endereco_nmPais </th>
+   <th style="text-align:left;"> paciente_endereco_uf </th>
+   <th style="text-align:left;"> paciente_endereco_cep </th>
+   <th style="text-align:left;"> paciente_nacionalidade_enumNacionalidade </th>
+   <th style="text-align:left;"> estabelecimento_valor </th>
+   <th style="text-align:left;"> estabelecimento_razaoSocial </th>
+   <th style="text-align:left;"> estalecimento_noFantasia </th>
+   <th style="text-align:right;"> estabelecimento_municipio_codigo </th>
+   <th style="text-align:left;"> estabelecimento_municipio_nome </th>
+   <th style="text-align:left;"> estabelecimento_uf </th>
+   <th style="text-align:left;"> vacina_grupoAtendimento_codigo </th>
+   <th style="text-align:left;"> vacina_grupoAtendimento_nome </th>
+   <th style="text-align:right;"> vacina_categoria_codigo </th>
+   <th style="text-align:left;"> vacina_categoria_nome </th>
+   <th style="text-align:left;"> vacina_lote </th>
+   <th style="text-align:left;"> vacina_fabricante_nome </th>
+   <th style="text-align:left;"> vacina_fabricante_referencia </th>
+   <th style="text-align:left;"> vacina_dataAplicacao </th>
+   <th style="text-align:left;"> vacina_descricao_dose </th>
+   <th style="text-align:right;"> vacina_codigo </th>
+   <th style="text-align:left;"> vacina_nome </th>
+   <th style="text-align:left;"> sistema_origem </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 4e992b56-494a-43a6-b093-9f3450338bda-i0b0 </td>
+   <td style="text-align:left;"> 07c37bf70113e321baba138c594fdc8558918fc9ae9ab356953ca7f75e9e2fff </td>
+   <td style="text-align:right;"> 30 </td>
+   <td style="text-align:left;"> 1991-06-08 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120050 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> SENA MADUREIRA </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69940 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 5981891 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIIPAL DE SENA MADUREIRA </td>
+   <td style="text-align:left;"> UNIDADE BASICA DE SAUDE MODULO I </td>
+   <td style="text-align:right;"> 120050 </td>
+   <td style="text-align:left;"> SENA MADUREIRA </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-01-24 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> d87a46a4-080a-4fb3-be87-055144ee9801-i0b0 </td>
+   <td style="text-align:left;"> 33c2a9897aea990e8ec6f13798e155f30db17407ab8fe56c4032b60fdf47d45f </td>
+   <td style="text-align:right;"> 23 </td>
+   <td style="text-align:left;"> 1999-06-08 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 03 </td>
+   <td style="text-align:left;"> PARDA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69920 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 212J21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-06-15 </td>
+   <td style="text-align:left;"> Dose Adicional </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> d5e90f13-03ed-477a-b6e1-5603ac043e93-i0b0 </td>
+   <td style="text-align:left;"> 6993563504bcecb37e788e1e1a1626ef26b4affbe9eed45628a007149c727320 </td>
+   <td style="text-align:right;"> 68 </td>
+   <td style="text-align:left;"> 1954-01-03 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69902 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000202 </td>
+   <td style="text-align:left;"> Pessoas de 65 a 69 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-05-23 </td>
+   <td style="text-align:left;"> 2º Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 02c9ee38-5ad3-42bc-b520-8c2d95a46e1e-i0b0 </td>
+   <td style="text-align:left;"> 56a9fda404368c16c27913b33ef1861f08acaf99ad48e8747c9f6462485ece58 </td>
+   <td style="text-align:right;"> 47 </td>
+   <td style="text-align:left;"> 1975-02-18 </td>
+   <td style="text-align:left;"> M </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69918 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000926 </td>
+   <td style="text-align:left;"> Outros </td>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:left;"> Trabalhadores de Saúde </td>
+   <td style="text-align:left;"> 212J21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-06-07 </td>
+   <td style="text-align:left;"> 2º Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> a4748591-a3b0-43c2-803d-c64095441c9f-i0b0 </td>
+   <td style="text-align:left;"> bd4a0068b5aff0512e50b691e2784c46bb665ff8c697fc7a9acf1fcc4a46deee </td>
+   <td style="text-align:right;"> 29 </td>
+   <td style="text-align:left;"> 1992-05-13 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69914 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-01-25 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> e324584a-0c53-4888-977d-78671bf39041-i0b0 </td>
+   <td style="text-align:left;"> f2ab8bafa327d4242c75d21dfb45c5864d6b4b350290f17ccdf5b08439099bed </td>
+   <td style="text-align:right;"> 46 </td>
+   <td style="text-align:left;"> 1976-03-20 </td>
+   <td style="text-align:left;"> M </td>
+   <td style="text-align:left;"> 03 </td>
+   <td style="text-align:left;"> PARDA </td>
+   <td style="text-align:right;"> 120035 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> MARECHAL THAUMATURGO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69983 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 2002132 </td>
+   <td style="text-align:left;"> PREFEITURA MUN DE MAL THAUMATURGO </td>
+   <td style="text-align:left;"> ESF RIBEIRINHA DR NALDIR MARIANO </td>
+   <td style="text-align:right;"> 120035 </td>
+   <td style="text-align:left;"> MARECHAL THAUMATURGO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000602 </td>
+   <td style="text-align:left;"> Ribeirinha </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> Povos e Comunidades Tradicionais </td>
+   <td style="text-align:left;"> 205F21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-05-09 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+</tbody>
+</table>
+
+```r
 # entradas únicas de vacina_fabricante_nome e vacina_nome
 unique(data_1_slice$vacina_fabricante_nome)
+```
+
+```
+## [1] "JANSSEN"                     "Organization/30587"         
+## [3] "Organization/00394544000851"
+```
+
+```r
 unique(data_1_slice$vacina_nome)
+```
+
+```
+## [1] "COVID-19 JANSSEN - Ad26.COV2.S" "Novo PNI"
 ```
 
 ### Resolução 1.e)
@@ -453,15 +721,278 @@ unique(data_1_slice$vacina_nome)
 ```r
 # Carregando todos os arquivos de uma única vez (vroom)
 files = list.files(dir_name, full.names = TRUE)
-data_complete = vroom(files, locale = locale("br",
-                      #encoding = "latin1"),
+
+if ('data_complete' %in% ls()){
+    invisible()
+  }else{
+    # use apenas caso tenha problemas de econding
+    data_complete = vroom(pipe(paste0('grep -wi Janssen ', gsub(pattern = ',', replacement = ' ', toString(files)))),
+                      col_names = names(data_1),
+                      #locale = locale("br",encoding = "latin1"),
                       num_threads = 3, delim = ";")
+}
+
+# head do df
+knitr::kable(head(data_complete)) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center')
 ```
+
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> document_id </th>
+   <th style="text-align:left;"> paciente_id </th>
+   <th style="text-align:right;"> paciente_idade </th>
+   <th style="text-align:left;"> paciente_dataNascimento </th>
+   <th style="text-align:left;"> paciente_enumSexoBiologico </th>
+   <th style="text-align:left;"> paciente_racaCor_codigo </th>
+   <th style="text-align:left;"> paciente_racaCor_valor </th>
+   <th style="text-align:right;"> paciente_endereco_coIbgeMunicipio </th>
+   <th style="text-align:right;"> paciente_endereco_coPais </th>
+   <th style="text-align:left;"> paciente_endereco_nmMunicipio </th>
+   <th style="text-align:left;"> paciente_endereco_nmPais </th>
+   <th style="text-align:left;"> paciente_endereco_uf </th>
+   <th style="text-align:left;"> paciente_endereco_cep </th>
+   <th style="text-align:left;"> paciente_nacionalidade_enumNacionalidade </th>
+   <th style="text-align:left;"> estabelecimento_valor </th>
+   <th style="text-align:left;"> estabelecimento_razaoSocial </th>
+   <th style="text-align:left;"> estalecimento_noFantasia </th>
+   <th style="text-align:right;"> estabelecimento_municipio_codigo </th>
+   <th style="text-align:left;"> estabelecimento_municipio_nome </th>
+   <th style="text-align:left;"> estabelecimento_uf </th>
+   <th style="text-align:left;"> vacina_grupoAtendimento_codigo </th>
+   <th style="text-align:left;"> vacina_grupoAtendimento_nome </th>
+   <th style="text-align:right;"> vacina_categoria_codigo </th>
+   <th style="text-align:left;"> vacina_categoria_nome </th>
+   <th style="text-align:left;"> vacina_lote </th>
+   <th style="text-align:left;"> vacina_fabricante_nome </th>
+   <th style="text-align:left;"> vacina_fabricante_referencia </th>
+   <th style="text-align:left;"> vacina_dataAplicacao </th>
+   <th style="text-align:left;"> vacina_descricao_dose </th>
+   <th style="text-align:right;"> vacina_codigo </th>
+   <th style="text-align:left;"> vacina_nome </th>
+   <th style="text-align:left;"> sistema_origem </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"4e992b56-494a-43a6-b093-9f3450338bda-i0b0" </td>
+   <td style="text-align:left;"> 07c37bf70113e321baba138c594fdc8558918fc9ae9ab356953ca7f75e9e2fff </td>
+   <td style="text-align:right;"> 30 </td>
+   <td style="text-align:left;"> 1991-06-08 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120050 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> SENA MADUREIRA </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69940 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 5981891 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIIPAL DE SENA MADUREIRA </td>
+   <td style="text-align:left;"> UNIDADE BASICA DE SAUDE MODULO I </td>
+   <td style="text-align:right;"> 120050 </td>
+   <td style="text-align:left;"> SENA MADUREIRA </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-01-24 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"d87a46a4-080a-4fb3-be87-055144ee9801-i0b0" </td>
+   <td style="text-align:left;"> 33c2a9897aea990e8ec6f13798e155f30db17407ab8fe56c4032b60fdf47d45f </td>
+   <td style="text-align:right;"> 23 </td>
+   <td style="text-align:left;"> 1999-06-08 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 03 </td>
+   <td style="text-align:left;"> PARDA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69920 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 212J21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-06-15 </td>
+   <td style="text-align:left;"> Dose Adicional </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"d5e90f13-03ed-477a-b6e1-5603ac043e93-i0b0" </td>
+   <td style="text-align:left;"> 6993563504bcecb37e788e1e1a1626ef26b4affbe9eed45628a007149c727320 </td>
+   <td style="text-align:right;"> 68 </td>
+   <td style="text-align:left;"> 1954-01-03 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69902 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000202 </td>
+   <td style="text-align:left;"> Pessoas de 65 a 69 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-05-23 </td>
+   <td style="text-align:left;"> 2º Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"02c9ee38-5ad3-42bc-b520-8c2d95a46e1e-i0b0" </td>
+   <td style="text-align:left;"> 56a9fda404368c16c27913b33ef1861f08acaf99ad48e8747c9f6462485ece58 </td>
+   <td style="text-align:right;"> 47 </td>
+   <td style="text-align:left;"> 1975-02-18 </td>
+   <td style="text-align:left;"> M </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69918 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000926 </td>
+   <td style="text-align:left;"> Outros </td>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:left;"> Trabalhadores de Saúde </td>
+   <td style="text-align:left;"> 212J21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-06-07 </td>
+   <td style="text-align:left;"> 2º Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"a4748591-a3b0-43c2-803d-c64095441c9f-i0b0" </td>
+   <td style="text-align:left;"> bd4a0068b5aff0512e50b691e2784c46bb665ff8c697fc7a9acf1fcc4a46deee </td>
+   <td style="text-align:right;"> 29 </td>
+   <td style="text-align:left;"> 1992-05-13 </td>
+   <td style="text-align:left;"> F </td>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:left;"> AMARELA </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69914 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 6917291 </td>
+   <td style="text-align:left;"> PREFEITURA MUNICIPAL DE RIO BRANCO </td>
+   <td style="text-align:left;"> DEPARTAMENTO DE VIGILANCIA EPIDEMIOLOGICA E AMBIENTAL </td>
+   <td style="text-align:right;"> 120040 </td>
+   <td style="text-align:left;"> RIO BRANCO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000201 </td>
+   <td style="text-align:left;"> Pessoas de 18 a 64 anos </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> Faixa Etária </td>
+   <td style="text-align:left;"> 1855836 </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-01-25 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dados/file_1.csv:"e324584a-0c53-4888-977d-78671bf39041-i0b0" </td>
+   <td style="text-align:left;"> f2ab8bafa327d4242c75d21dfb45c5864d6b4b350290f17ccdf5b08439099bed </td>
+   <td style="text-align:right;"> 46 </td>
+   <td style="text-align:left;"> 1976-03-20 </td>
+   <td style="text-align:left;"> M </td>
+   <td style="text-align:left;"> 03 </td>
+   <td style="text-align:left;"> PARDA </td>
+   <td style="text-align:right;"> 120035 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> MARECHAL THAUMATURGO </td>
+   <td style="text-align:left;"> BRASIL </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 69983 </td>
+   <td style="text-align:left;"> B </td>
+   <td style="text-align:left;"> 2002132 </td>
+   <td style="text-align:left;"> PREFEITURA MUN DE MAL THAUMATURGO </td>
+   <td style="text-align:left;"> ESF RIBEIRINHA DR NALDIR MARIANO </td>
+   <td style="text-align:right;"> 120035 </td>
+   <td style="text-align:left;"> MARECHAL THAUMATURGO </td>
+   <td style="text-align:left;"> AC </td>
+   <td style="text-align:left;"> 000602 </td>
+   <td style="text-align:left;"> Ribeirinha </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> Povos e Comunidades Tradicionais </td>
+   <td style="text-align:left;"> 205F21A </td>
+   <td style="text-align:left;"> JANSSEN </td>
+   <td style="text-align:left;"> Organization/30587 </td>
+   <td style="text-align:left;"> 2022-05-09 </td>
+   <td style="text-align:left;"> Reforço </td>
+   <td style="text-align:right;"> 88 </td>
+   <td style="text-align:left;"> COVID-19 JANSSEN - Ad26.COV2.S </td>
+   <td style="text-align:left;"> Novo PNI </td>
+  </tr>
+</tbody>
+</table>
 
 ## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 2.a)
 
+```r
+# instalação dos pacotes casso necessário via pacman e carregamantos destes
+pacman::p_load(data.table)
+```
 
 ### Resolução 2.b)
 
