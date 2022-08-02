@@ -288,24 +288,21 @@
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(vroom, tidyverse, kableExtra)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># carregando o arquivo previamente baixado (primeiro arquivo - AC parte 0)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_1&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>()){</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use apenas caso tenha problemas de econding</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    data_1 <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">sort</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span>],</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#locale = locale(&quot;br&quot;, encoding = &quot;latin1&quot;),</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_1)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>)</span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_1&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>() <span class="sc">==</span> <span class="cn">TRUE</span>){</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use locale apenas caso tenha problemas de econding</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    data_1 <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">sort</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#locale = locale(&quot;br&quot;, encoding = &quot;latin1&quot;),</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_1)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>)</span></code></pre></div>
 <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1153,37 +1150,62 @@ Novo PNI
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensão dos arquivos separados (bytes para MB)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (file <span class="cf">in</span> <span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>)){</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(file, <span class="fu">file.info</span>(file)<span class="sc">$</span>size<span class="sc">*</span>(<span class="fl">9.537</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^-</span><span class="dv">7</span>), <span class="st">&#39;MB&#39;</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensão dos arquivos unificados (em MB)</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Total folder dados unificado&quot;</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="fu">map</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>), file.info), <span class="cf">function</span>(x) x[[<span class="dv">1</span>]]))<span class="sc">*</span>(<span class="fl">9.537</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^-</span><span class="dv">7</span>),</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;MB&#39;</span>))</span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;dados/file_1.csv 249.9311415843 MB&quot;
+## [1] &quot;dados/file_10.csv 198.4682202096 MB&quot;
+## [1] &quot;dados/file_11.csv 199.1800390008 MB&quot;
+## [1] &quot;dados/file_12.csv 199.522318116 MB&quot;
+## [1] &quot;dados/file_2.csv 249.1863467082 MB&quot;
+## [1] &quot;dados/file_3.csv 250.0449361146 MB&quot;
+## [1] &quot;dados/file_4.csv 987.5625061335 MB&quot;
+## [1] &quot;dados/file_5.csv 985.7884553286 MB&quot;
+## [1] &quot;dados/file_6.csv 989.6171803023 MB&quot;
+## [1] &quot;dados/file_7.csv 1138.2955445565 MB&quot;
+## [1] &quot;dados/file_8.csv 1139.6318518299 MB&quot;
+## [1] &quot;dados/file_9.csv 1141.4629605984 MB&quot;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensão dos arquivos unificados (em MB)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Total folder dados unificado&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="fu">map</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>), file.info), <span class="cf">function</span>(x) x[[<span class="dv">1</span>]]))<span class="sc">*</span>(<span class="fl">9.537</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^-</span><span class="dv">7</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;MB&#39;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;Total folder dados unificado 7728.6915004827 MB&quot;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># usando file.size do pacote fs</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensão dos arquivos separados (bytes para MB)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">paste</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>), <span class="fu">map</span>(<span class="at">.f =</span> utils<span class="sc">:::</span>format.object_size, <span class="at">.x =</span> <span class="fu">file.size</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>)), <span class="at">units =</span> <span class="st">&#39;Mb&#39;</span>)))</span></code></pre></div>
+<pre><code>##  [1] &quot;dados/file_1.csv 249.9 Mb&quot;  &quot;dados/file_10.csv 198.5 Mb&quot;
+##  [3] &quot;dados/file_11.csv 199.2 Mb&quot; &quot;dados/file_12.csv 199.5 Mb&quot;
+##  [5] &quot;dados/file_2.csv 249.2 Mb&quot;  &quot;dados/file_3.csv 250 Mb&quot;   
+##  [7] &quot;dados/file_4.csv 987.5 Mb&quot;  &quot;dados/file_5.csv 985.8 Mb&quot; 
+##  [9] &quot;dados/file_6.csv 989.6 Mb&quot;  &quot;dados/file_7.csv 1138.3 Mb&quot;
+## [11] &quot;dados/file_8.csv 1139.6 Mb&quot; &quot;dados/file_9.csv 1141.4 Mb&quot;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># usando file.size do pacote fs</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimensão dos arquivos unificados (em MB)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">:::</span><span class="fu">format.object_size</span>(<span class="fu">sum</span>(<span class="fu">file.size</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>))), <span class="at">units =</span> <span class="st">&#39;Mb&#39;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;7728.5 Mb&quot;</code></pre>
 </div>
 <div id="resolução-1.d" class="section level3">
 <h3>Resolução 1.d)</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># usando o arquivo previamente baixado (primeiro arquivo)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use apenas caso tenha problemas de econdingng</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_1_slice&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>()){</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use apenas caso tenha problemas de econding</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    data_1_slice <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">sort</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span>])),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col_names =</span> <span class="fu">names</span>(data_1),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#locale = locale(&quot;br&quot;, encoding = &quot;latin1&quot;),</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_1_slice)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>,</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                <span class="co">#htmltable_class = &#39;lightable-striped&#39;</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># usando o arquivo previamente baixado (primeiro arquivo)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use locale apenas caso tenha problemas de econdingng</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_1_slice&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>() <span class="sc">==</span> <span class="cn">TRUE</span>){</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use locale apenas caso tenha problemas de econding</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    data_1_slice <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">sort</span>(<span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>))[<span class="dv">1</span>])),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col_names =</span> <span class="fu">names</span>(data_1),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#locale = locale(&quot;br&quot;, encoding = &quot;latin1&quot;),</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_1_slice)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>                <span class="co">#htmltable_class = &#39;lightable-striped&#39;</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>                )</span></code></pre></div>
 <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1876,34 +1898,34 @@ Novo PNI
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># entradas únicas de vacina_fabricante_nome e vacina_nome</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data_1_slice<span class="sc">$</span>vacina_fabricante_nome)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># entradas únicas de vacina_fabricante_nome e vacina_nome</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data_1_slice<span class="sc">$</span>vacina_fabricante_nome)</span></code></pre></div>
 <pre><code>## [1] &quot;JANSSEN&quot;                     &quot;Organization/30587&quot;         
 ## [3] &quot;Organization/00394544000851&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data_1_slice<span class="sc">$</span>vacina_nome)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data_1_slice<span class="sc">$</span>vacina_nome)</span></code></pre></div>
 <pre><code>## [1] &quot;COVID-19 JANSSEN - Ad26.COV2.S&quot; &quot;Novo PNI&quot;</code></pre>
 </div>
 <div id="resolução-1.e" class="section level3">
 <h3>Resolução 1.e)</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando todos os arquivos de uma única vez (vroom)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">=</span> <span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_complete&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>()){</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use apenas caso tenha problemas de econding</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    data_complete <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">&#39;,&#39;</span>, <span class="at">replacement =</span> <span class="st">&#39; &#39;</span>, <span class="fu">toString</span>(files)))),</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_names =</span> <span class="fu">names</span>(data_1),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                      <span class="co">#locale = locale(&quot;br&quot;,encoding = &quot;latin1&quot;),</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_complete)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando todos os arquivos de uma única vez (vroom)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">=</span> <span class="fu">list.files</span>(dir_name, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&#39;data_complete&#39;</span> <span class="sc">%in%</span> <span class="fu">ls</span>() <span class="sc">==</span> <span class="cn">TRUE</span>){</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invisible</span>()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use locale apenas caso tenha problemas de econding</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    data_complete <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">&#39;,&#39;</span>, <span class="at">replacement =</span> <span class="st">&#39; &#39;</span>, <span class="fu">toString</span>(files)))),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_names =</span> <span class="fu">names</span>(data_1),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                      <span class="co">#locale = locale(&quot;br&quot;,encoding = &quot;latin1&quot;),</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># head do df</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(data_complete)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">protect_latex =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&#39;center&#39;</span>)</span></code></pre></div>
 <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2602,8 +2624,8 @@ Novo PNI
 <h2 class="tabset tabset-fade tabset-pills">Questão 2: manipulação de dados</h2>
 <div id="resolução-2.a" class="section level3">
 <h3>Resolução 2.a)</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># instalação dos pacotes casso necessário via pacman e carregamantos destes</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(data.table)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># instalação dos pacotes casso necessário via pacman e carregamantos destes</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(data.table)</span></code></pre></div>
 </div>
 <div id="resolução-2.b" class="section level3">
 <h3>Resolução 2.b)</h3>

@@ -112,7 +112,7 @@ if ('data_1' %in% ls() == TRUE){
     invisible()
   }else{
     # use locale apenas caso tenha problemas de econding
-    data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
+    data_1 = vroom(list.files(dir_name, full.names = TRUE)[1],
                    #locale = locale("br", encoding = "latin1"),
                    num_threads = 3, delim = ";")
 }
@@ -175,25 +175,31 @@ sistema_origem | nome do sistema de origem;
 
 
 ### Resolução 1.c)
-```{r 1.c, eval=FALSE}
-# Dimensão dos arquivos separados (bytes para MB)
+```{r 1.c}
+# Dimensão dos arquivos separados no HD (bytes para MB)
 for (file in list.files(dir_name, full.names = TRUE)){
   print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
 }
 
-# Dimensão dos arquivos unificados (em MB)
+# Dimensão dos arquivos unificados no HD (em MB)
 print(paste("Total folder dados unificado",
             sum(sapply(map(list.files(dir_name, full.names = TRUE), file.info), function(x) x[[1]]))*(9.537*10^-7),
             'MB'))
 
 # usando file.size do pacote fs
-# Dimensão dos arquivos separados (bytes para MB)
+# Dimensão dos arquivos separados no HD (bytes para MB)
 unlist(paste(list.files(dir_name, full.names = TRUE), map(.f = utils:::format.object_size, .x = file.size(list.files(dir_name, full.names = TRUE)), units = 'Mb')))
 
-
 # usando file.size do pacote fs
-# Dimensão dos arquivos unificados (em MB)
+# Dimensão dos arquivos unificados no HD (em MB)
 utils:::format.object_size(sum(file.size(list.files(dir_name, full.names = TRUE))), units = 'Mb')
+
+# usando object.size do pacote fs
+# Dimensão do primeiro arquivo na RAM (bytes para MB)
+print(paste(list.files(dir_name)[1], utils:::format.object_size(object.size(data_1), units = 'Mb')))
+
+# diferença HD e RAM
+utils:::format.object_size(file.size(list.files(dir_name, full.names = TRUE)[1])-object.size(data_1), units = 'Mb')
 ```
 
 ### Resolução 1.d)
@@ -206,7 +212,7 @@ if ('data_1_slice' %in% ls() == TRUE){
     invisible()
   }else{
     # use locale apenas caso tenha problemas de econding
-    data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
+    data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', list.files(dir_name, full.names = TRUE)[1])),
                    col_names = names(data_1),
                    #locale = locale("br", encoding = "latin1"),
                    num_threads = 3, delim = ";")
@@ -225,6 +231,8 @@ knitr::kable(head(data_1_slice)) %>%
 unique(data_1_slice$vacina_fabricante_nome)
 unique(data_1_slice$vacina_nome)
 
+# diferença HD e RAM
+utils:::format.object_size(file.size(list.files(dir_name, full.names = TRUE)[1])-object.size(data_1_slice), units = 'Mb')
 ```
 
 ### Resolução 1.e)
@@ -255,7 +263,15 @@ knitr::kable(head(data_complete)) %>%
 ### Resolução 2.a)
 ```{r 2.a}
 # instalação dos pacotes casso necessário via pacman e carregamantos destes
-pacman::p_load(data.table)
+pacman::p_load(data.table, geobr)
+
+data_1_dt = fread(list.files(dir_name, full.names = TRUE)[1],
+                    select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
+                    encoding = 'UTF-8')
+
+data_1_dt = data_1_dt[, estabelecimento_municipio_codigo := as.character(estabelecimento_municipio_codigo)]
+data_1_dt = merge(data_1_dt, geobr::read_health_region(year = 2013, simplified = FALSE), by.x = 'estabelecimento_municipio_codigo', by.y = 'name_health_region')
+
 ```
 
 ### Resolução 2.b)

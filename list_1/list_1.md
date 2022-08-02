@@ -96,17 +96,14 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(vroom, tidyverse, kableExtra)
 
 # carregando o arquivo previamente baixado (primeiro arquivo - AC parte 0)
-
-if ('data_1' %in% ls()){
+if ('data_1' %in% ls() == TRUE){
     invisible()
   }else{
-    # use apenas caso tenha problemas de econding
+    # use locale apenas caso tenha problemas de econding
     data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
                    #locale = locale("br", encoding = "latin1"),
                    num_threads = 3, delim = ";")
 }
-
-
 
 # head do df
 knitr::kable(head(data_1)) %>%
@@ -419,11 +416,57 @@ sistema_origem | nome do sistema de origem;
 for (file in list.files(dir_name, full.names = TRUE)){
   print(paste(file, file.info(file)$size*(9.537*10^-7), 'MB'))
 }
+```
 
+```
+## [1] "dados/file_1.csv 249.9311415843 MB"
+## [1] "dados/file_10.csv 198.4682202096 MB"
+## [1] "dados/file_11.csv 199.1800390008 MB"
+## [1] "dados/file_12.csv 199.522318116 MB"
+## [1] "dados/file_2.csv 249.1863467082 MB"
+## [1] "dados/file_3.csv 250.0449361146 MB"
+## [1] "dados/file_4.csv 987.5625061335 MB"
+## [1] "dados/file_5.csv 985.7884553286 MB"
+## [1] "dados/file_6.csv 989.6171803023 MB"
+## [1] "dados/file_7.csv 1138.2955445565 MB"
+## [1] "dados/file_8.csv 1139.6318518299 MB"
+## [1] "dados/file_9.csv 1141.4629605984 MB"
+```
+
+```r
 # Dimensão dos arquivos unificados (em MB)
 print(paste("Total folder dados unificado",
             sum(sapply(map(list.files(dir_name, full.names = TRUE), file.info), function(x) x[[1]]))*(9.537*10^-7),
             'MB'))
+```
+
+```
+## [1] "Total folder dados unificado 7728.6915004827 MB"
+```
+
+```r
+# usando file.size do pacote fs
+# Dimensão dos arquivos separados (bytes para MB)
+unlist(paste(list.files(dir_name, full.names = TRUE), map(.f = utils:::format.object_size, .x = file.size(list.files(dir_name, full.names = TRUE)), units = 'Mb')))
+```
+
+```
+##  [1] "dados/file_1.csv 249.9 Mb"  "dados/file_10.csv 198.5 Mb"
+##  [3] "dados/file_11.csv 199.2 Mb" "dados/file_12.csv 199.5 Mb"
+##  [5] "dados/file_2.csv 249.2 Mb"  "dados/file_3.csv 250 Mb"   
+##  [7] "dados/file_4.csv 987.5 Mb"  "dados/file_5.csv 985.8 Mb" 
+##  [9] "dados/file_6.csv 989.6 Mb"  "dados/file_7.csv 1138.3 Mb"
+## [11] "dados/file_8.csv 1139.6 Mb" "dados/file_9.csv 1141.4 Mb"
+```
+
+```r
+# usando file.size do pacote fs
+# Dimensão dos arquivos unificados (em MB)
+utils:::format.object_size(sum(file.size(list.files(dir_name, full.names = TRUE))), units = 'Mb')
+```
+
+```
+## [1] "7728.5 Mb"
 ```
 
 ### Resolução 1.d)
@@ -431,12 +474,12 @@ print(paste("Total folder dados unificado",
 ```r
 # usando o arquivo previamente baixado (primeiro arquivo)
 # pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)
-# use apenas caso tenha problemas de econdingng
+# use locale apenas caso tenha problemas de econdingng
 
-if ('data_1_slice' %in% ls()){
+if ('data_1_slice' %in% ls() == TRUE){
     invisible()
   }else{
-    # use apenas caso tenha problemas de econding
+    # use locale apenas caso tenha problemas de econding
     data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
                    col_names = names(data_1),
                    #locale = locale("br", encoding = "latin1"),
@@ -722,10 +765,10 @@ unique(data_1_slice$vacina_nome)
 # Carregando todos os arquivos de uma única vez (vroom)
 files = list.files(dir_name, full.names = TRUE)
 
-if ('data_complete' %in% ls()){
+if ('data_complete' %in% ls() == TRUE){
     invisible()
   }else{
-    # use apenas caso tenha problemas de econding
+    # use locale apenas caso tenha problemas de econding
     data_complete = vroom(pipe(paste0('grep -wi Janssen ', gsub(pattern = ',', replacement = ' ', toString(files)))),
                       col_names = names(data_1),
                       #locale = locale("br",encoding = "latin1"),
