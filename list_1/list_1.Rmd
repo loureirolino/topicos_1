@@ -286,7 +286,7 @@ data_1_dt = merge(data_1_dt,
 data_1_dt = data_1_dt[, saude := as.character(saude)]
 # merge final
 data_1_dt = merge(data_1_dt,
-                  geobr::read_health_region(year = 2013, simplified = FALSE),
+                  invisible(geobr::read_health_region(year = 2013, simplified = FALSE)),
                   by.x = 'saude',
                   by.y = 'code_health_region') %>%
             select(c(1:8))
