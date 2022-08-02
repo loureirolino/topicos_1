@@ -266,7 +266,6 @@ knitr::kable(head(data_complete)) %>%
 pacman::p_load(data.table, geobr)
 
 # Carregando todos os arquivos de uma única vez (data.table)
-# usando invisible() para não gerar echo
 l = lapply(files, fread, 
            select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
            encoding = 'UTF-8',
