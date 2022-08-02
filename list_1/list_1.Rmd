@@ -37,7 +37,7 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
-                      cache = FALSE)
+                      cache = TRUE)
 
 # use locale apenas caso tenha problemas de econding
 # Configurando sistema para a língua portuguesa pt-BR
@@ -262,20 +262,50 @@ knitr::kable(head(data_complete)) %>%
 
 ### Resolução 2.a)
 ```{r 2.a}
-# instalação dos pacotes casso necessário via pacman e carregamantos destes
+# instalação dos pacotes casso necessário via pacman e carregamentos destes
 pacman::p_load(data.table, geobr)
 
-data_1_dt = fread(list.files(dir_name, full.names = TRUE)[1],
-                    select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
-                    encoding = 'UTF-8')
+# Carregando todos os arquivos de uma única vez (data.table)
+l = lapply(files, fread, 
+           select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
+           encoding = 'UTF-8',
+           sep = ';')
+data_1_dt = rbindlist(l)
 
-data_1_dt = data_1_dt[, estabelecimento_municipio_codigo := as.character(estabelecimento_municipio_codigo)]
-data_1_dt = merge(data_1_dt, geobr::read_health_region(year = 2013, simplified = FALSE), by.x = 'estabelecimento_municipio_codigo', by.y = 'name_health_region')
-
+# arquivo contendo a relação entre município e região de saúde (tableExport.csv)
+# baixado de https://sage.saude.gov.br/paineis/regiaoSaude/lista.php?output=html&
+# merge intermediário
+data_1_dt = merge(data_1_dt,
+                  fread('tableExport.csv',
+                    select = 4:5,
+                    encoding = 'UTF-8',
+                    col.names = c('ibge', 'saude')),
+                  by.x = 'estabelecimento_municipio_codigo',
+                  by.y = 'ibge')
+data_1_dt = data_1_dt[, saude := as.character(saude)]
+# merge final
+data_1_dt = merge(data_1_dt,
+                  geobr::read_health_region(year = 2013, simplified = FALSE),
+                  by.x = 'saude',
+                  by.y = 'code_health_region') %>%
+            select(c(1:8))
 ```
 
 ### Resolução 2.b)
 ```{r 2.b}
+# Quantidade de vacinados por região de saúde, segunda dose (data.table)
+data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)]
+
+knitr::kable(data_1_dt_cut[order(-N)][1:5, ]) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
+
+
+# Condicionalmente, a faixa de vacinação por região de saúde (alta ou baixa, em relação à mediana da distribuição de vacinações)
 
 ```
 
