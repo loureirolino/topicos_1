@@ -9,3 +9,4 @@
 
 **Caso deseje visualizar o HTML gerado sem precisar baixá-lo use o link a seguir <http://htmlpreview.github.io/>, assim como o link do HTML do git.**
 
+Link do **HTML desse exercício** <https://github.com/loureirolino/topicos_1/blob/main/list_1/list_1.html>
