@@ -266,6 +266,7 @@ knitr::kable(head(data_complete)) %>%
 pacman::p_load(data.table, geobr)
 
 # Carregando todos os arquivos de uma única vez (data.table)
+# usando invisible() para não gerar echo
 l = lapply(files, fread, 
            select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
            encoding = 'UTF-8',
@@ -285,18 +286,12 @@ data_1_dt = merge(data_1_dt,
 data_1_dt = data_1_dt[, saude := as.character(saude)]
 # merge final
 data_1_dt = merge(data_1_dt,
-                  geobr::read_health_region(year = 2013, simplified = FALSE),
+                  invisible(geobr::read_health_region(year = 2013, simplified = FALSE)),
                   by.x = 'saude',
                   by.y = 'code_health_region') %>%
             select(c(1:8))
-```
-
-### Resolução 2.b)
-```{r 2.b}
-# Quantidade de vacinados por região de saúde, segunda dose (data.table)
-data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)]
-
-knitr::kable(data_1_dt_cut[order(-N)][1:5, ]) %>%
+# head do df
+knitr::kable(head(data_1_dt)) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
                 protect_latex = TRUE,
@@ -304,14 +299,28 @@ knitr::kable(data_1_dt_cut[order(-N)][1:5, ]) %>%
                 #htmltable_class = 'lightable-striped'
                 )
 
+```
 
+### Resolução 2.b)
+```{r 2.b}
+# Quantidade de vacinados por região de saúde, segunda dose
 # Condicionalmente, a faixa de vacinação por região de saúde (alta ou baixa, em relação à mediana da distribuição de vacinações)
+data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<=median(N), faixa := 'baixa']
+
+knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
 
 ```
 
 ### Resolução 2.c)
 ```{r 2.c}
-
+# instalação dos pacotes casso necessário via pacman e carregamentos destes
+pacman::p_load(dtplyr)
 ```
 
 ### Resolução 2.d)
