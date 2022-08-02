@@ -60,7 +60,7 @@ options(scipen = 999)
 ## Questão 1: leitura eficiente de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 1.a)
-```{r 1.a, eval=FALSE}
+```{r 1.a}
 ### CUIDADO AO RODAR ESSE CHUNK, DADOS MASSIVOS!!!!
 
 # checando se o diretório existe e se necessário criá-lo
@@ -78,12 +78,12 @@ pacman::p_load(rvest)
 base_url = read_html('https://opendatasus.saude.gov.br/dataset/covid-19-vacinacao/resource/5093679f-12c3-4d6b-b7bd-07694de54173?inner_span=True')
 
 entries = base_url %>%
-  html_nodes(xpath = '//*[@id="content"]') %>%
+  #html_nodes(xpath = '//*[@id="content"]') %>%
   #html_nodes('ul') %>%
-  #html_nodes('a') %>% 
+  html_nodes('a') %>% 
   html_attr('href')
 entries = entries[grep(pattern= '.csv', x = entries)]
-entries = entries[grep(pattern = ''), x = entries]
+entries = entries[grep(pattern = paste(c('uf%3DAC', 'uf%3DAL', 'uf%3DAM', 'uf%3DAP'), collapse = '|'), x = entries)]
 
 options(timeout=999999) # essa linha é um workaround para o timeout do download
 
@@ -104,18 +104,25 @@ for (i in 1:length(entries)) {
 ```
 
 ### Resolução 1.b)
-```{r 1.b, eval=FALSE}
-# instalação dos pacotes casso necessário via pacman e carregamantos destes
+```{r 1.b}
+# instalação dos pacotes casso necessário via pacman e carregamentos destes
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(vroom, tidyverse)
+pacman::p_load(vroom, tidyverse, kableExtra)
 
-# carregando o arquivo previamente baixado (primeiro arquivo)
+# carregando o arquivo previamente baixado (primeiro arquivo - AC parte 0)
+# passe o locale caso tenha problemas de enconding
 data_1 = vroom(sort(list.files(dir_name, full.names = TRUE))[1],
                #locale = locale("br", encoding = "latin1"),
                num_threads = 3, delim = ";")
 
 # head do df
-data_1[1:10,]
+knitr::kable(head(data_1)) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
 
 # carregando o arquivo diretamente da internet
 # data_1 =vroom(entries[1],
@@ -124,8 +131,7 @@ data_1[1:10,]
 ```
 
 
-O arquivo contendo o dicionário das variáveis pode ser encontrado no link abaixo:  
-[Dicionário](https://opendatasus.saude.gov.br/dataset/8e0c325d-2586-4b11-8925-4ba51acd6e6d/resource/a8308b58-8898-4c6d-8119-400c722c71b5/download/dicionario-de-dados-vacinacao.pdf):
+O arquivo contendo o dicionário das variáveis pode ser encontrado no link abaixo [Dicionário](https://opendatasus.saude.gov.br/dataset/8e0c325d-2586-4b11-8925-4ba51acd6e6d/resource/a8308b58-8898-4c6d-8119-400c722c71b5/download/dicionario-de-dados-vacinacao.pdf)
 
 A mesma informação pode ser visualizada abaixo:
 
@@ -133,37 +139,38 @@ A mesma informação pode ser visualizada abaixo:
 
 Variável | Descrição 
 ---|------------------------------------------------------------------------------
-document_id  | ;
-paciente_id  | ;
-paciente_dataNascimento  | ;
-paciente_enumSexoBiologico  | ;
-paciente_racaCor_codigo  | ;
-paciente_racaCor_valor  | ;
-paciente_endereco_coIbgeMunicipio  | ;
-paciente_endereco_coPais  | ;
-paciente_endereco_nmMunicipio  | ;
-paciente_endereco_nmPais | Gráficos (1);
-paciente_endereco_uf | ;
-paciente_endereco_cep | ;
-paciente_nacionalidade_enumNacionalidade | ;
-estabelecimento_valor | ;
-estabelecimento_razaoSocial | ;
-estalecimento_noFantasia | ;
-estabelecimento_municipio_codigo | ;
-estabelecimento_municipio_nome | ;
-estabelecimento_uf | ;
-vacina_grupoAtendimento_codigo | ;
-vacina_grupoAtendimento_nome | ;
-vacina_categoria_codigo | ;
-vacina_categoria_nome | ;
-vacina_lote | ;
-vacina_fabricante_nome | ;
-vacina_fabricante_referencia | ;
-vacina_dataAplicacao | ;
-vacina_descricao_dose | ;
-vacina_codigo | ;
-vacina_nome | ;
-sistema_origem | ;
+document_id  | identificador do documento;
+paciente_id  | identificador do paciente;
+paciente_idade  | idade do vacinado;
+paciente_dataNascimento  | data de nascimento do vacinado;
+paciente_enumSexoBiologico  | sexo do vacinado (M = masculino, F = feminino);
+paciente_racaCor_codigo  | código da raça/cor do vacinado (1, 2, 3, 4, 99);
+paciente_racaCor_valor  | descrição da raça/cor do vacinado (1 = branca, 2 = preta, 3 = parda, 4 = amarela, 99 = sem informação);
+paciente_endereco_coIbgeMunicipio  | código IBGE do município de endereço do vacinado;
+paciente_endereco_coPais  | código do país de endereço do vacinado;
+paciente_endereco_nmMunicipio  | nome do município de endereço do vacinado;
+paciente_endereco_nmPais | nome do país de endereço do vacinado;
+paciente_endereco_uf | sigla da UF de endereço do vacinado;
+paciente_endereco_cep | 5 dígitos para anonimizado e 7 dígitos para identificado;
+paciente_nacionalidade_enumNacionalidade | nacionalidade do vacinado;
+estabelecimento_valor | código do CNES do estabelecimento que realizou a vacinação;
+estabelecimento_razaoSocial | nome/razão social do estabelecimento;
+estalecimento_noFantasia | nome fantasia do estabelecimento;
+estabelecimento_municipio_codigo | código do município do estabelecimento;
+estabelecimento_municipio_nome | nome do município do estabelecimento;
+estabelecimento_uf | sigla da UF do estabelecimento;
+vacina_grupoAtendimento_codigo | código do grupo de atendimento ao qual pertence o vacinado;
+vacina_grupoAtendimento_nome | nome do grupo de atendimento ao qual pertence o vacinado;
+vacina_categoria_codigo | código da categoria;
+vacina_categoria_nome | descrição da categoria;
+vacina_lote | número do lote da vacina;
+vacina_fabricante_nome | nome do fabricante/fornecedor;
+vacina_fabricante_referencia | CNPJ do fabricante/fornecedor;
+vacina_dataAplicacao | data de aplicação da vacina;
+vacina_descricao_dose | descrição da dose;
+vacina_codigo | código da vacina;
+vacina_nome | nome da vacina/produto;
+sistema_origem | nome do sistema de origem;
 
 
 
@@ -182,16 +189,23 @@ print(paste("Total folder dados unificado",
 ```
 
 ### Resolução 1.d)
-```{r 1.d, eval=FALSE}
+```{r 1.d}
 # usando o arquivo previamente baixado (primeiro arquivo)
-# pegando para todas as entradas que contenha a palavra astrazeneca em todas as suas formas (case sensitive)
-data_1_slice = vroom(pipe(paste0('grep -wi astrazeneca ', sort(list.files(dir_name, full.names = TRUE))[1])),
+# pegando para todas as entradas que contenha a palavra Janssen em todas as suas formas (case sensitive)
+# passe o locale caso tenha problemas de enconding
+data_1_slice = vroom(pipe(paste0('grep -wi Janssen ', sort(list.files(dir_name, full.names = TRUE))[1])),
                col_names = names(data_1),
                #locale = locale("br", encoding = "latin1"),
                num_threads = 3, delim = ";")
 
 # head do df
-data_1_slice[1:10,]
+knitr::kable(head(data_1_slice)) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
 
 # entradas únicas de vacina_fabricante_nome e vacina_nome
 unique(data_1_slice$vacina_fabricante_nome)
@@ -200,19 +214,36 @@ unique(data_1_slice$vacina_nome)
 ```
 
 ### Resolução 1.e)
-```{r 1.e, eval=FALSE}
+```{r 1.e}
 # Carregando todos os arquivos de uma única vez (vroom)
+# passe o locale caso tenha problemas de enconding
 files = list.files(dir_name, full.names = TRUE)
-data_complete = vroom(files, locale = locale("br",
-                      #encoding = "latin1"),
+
+if ('data_complete' %in% ls()){
+  invisible()
+  }else{
+}
+data_complete = vroom(pipe(paste0('grep -wi Janssen ', gsub(pattern = ',', replacement = ' ', toString(files)))),
+                      col_names = names(data_1),
+                      #locale = locale("br",encoding = "latin1"),
                       num_threads = 3, delim = ";")
+
+# head do df
+knitr::kable(head(data_complete)) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
 ```
 
 ## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 2.a)
 ```{r 2.a}
-
+# instalação dos pacotes casso necessário via pacman e carregamantos destes
+pacman::p_load(data.table)
 ```
 
 ### Resolução 2.b)
