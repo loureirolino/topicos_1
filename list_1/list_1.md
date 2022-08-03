@@ -5,7 +5,7 @@ title: |
 subtitle: "Computação em Estatística para dados e cálculos massivos"
 author: "<b>Autor:</b> Lucas Loureiro Lino da Costa"
 affiliation: "Universidade de Brasília"
-date: "02 de agosto de 2022"
+date: "03 de agosto de 2022"
 tags: [estatística, computação]
 output:
   rmdformats::readthedown:
@@ -1065,30 +1065,14 @@ knitr::kable(head(data_complete)) %>%
 pacman::p_load(data.table, geobr)
 
 # Carregando todos os arquivos de uma única vez (data.table)
-# usando invisible() para não gerar echo
-l = invisible(lapply(files, fread, 
+l = lapply(files, fread, 
            select = c('estabelecimento_uf', 'vacina_descricao_dose', 'estabelecimento_municipio_codigo'),
            encoding = 'UTF-8',
-           sep = ';'))
-data_1_dt = invisible(rbindlist(l))
+           sep = ';')
+data_1_dt = rbindlist(l)
 
-# arquivo contendo a relação entre município e região de saúde (tableExport.csv)
-# baixado de https://sage.saude.gov.br/paineis/regiaoSaude/lista.php?output=html&
-# merge intermediário
-data_1_dt = merge(data_1_dt,
-                  fread('tableExport.csv',
-                    select = 4:5,
-                    encoding = 'UTF-8',
-                    col.names = c('ibge', 'saude')),
-                  by.x = 'estabelecimento_municipio_codigo',
-                  by.y = 'ibge')
-data_1_dt = data_1_dt[, saude := as.character(saude)]
-# merge final
-data_1_dt = merge(data_1_dt,
-                  geobr::read_health_region(year = 2013, simplified = FALSE),
-                  by.x = 'saude',
-                  by.y = 'code_health_region') %>%
-            select(c(1:8))
+# dados da saúde
+data_health = geobr::read_health_region(year = 2013, simplified = FALSE)
 ```
 
 ```
@@ -1101,74 +1085,98 @@ Downloading: 1.8 kB
 Downloading: 1.8 kB     
 Downloading: 1.8 kB     
 Downloading: 1.8 kB     
-Downloading: 1.8 kB     
-Downloading: 1.8 kB     
+Downloading: 1.9 kB     
+Downloading: 1.9 kB     
 Downloading: 1.9 kB     
 Downloading: 1.9 kB     
 Downloading: 2 kB     
 Downloading: 2 kB     
 Downloading: 2 kB     
 Downloading: 2 kB     
-Downloading: 2 kB     
-Downloading: 2 kB     
 Downloading: 2.1 kB     
 Downloading: 2.1 kB     
 Downloading: 2.1 kB     
 Downloading: 2.1 kB     
 Downloading: 2.1 kB     
 Downloading: 2.1 kB     
-Downloading: 2.2 kB     
-Downloading: 2.2 kB     
-Downloading: 3.5 kB     
-Downloading: 3.5 kB     
-Downloading: 4 kB     
-Downloading: 4 kB     
+Downloading: 3.2 kB     
+Downloading: 3.2 kB     
+Downloading: 3.6 kB     
+Downloading: 3.6 kB     
+Downloading: 3.6 kB     
+Downloading: 3.6 kB     
 Downloading: 5.7 kB     
 Downloading: 5.7 kB     
 Downloading: 5.7 kB     
 Downloading: 5.7 kB     
 Downloading: 5.7 kB     
 Downloading: 5.7 kB     
-Downloading: 12 kB     
-Downloading: 12 kB     
-Downloading: 12 kB     
-Downloading: 12 kB     
-Downloading: 12 kB     
-Downloading: 12 kB     
-Downloading: 19 kB     
-Downloading: 19 kB     
-Downloading: 19 kB     
-Downloading: 19 kB     
-Downloading: 19 kB     
-Downloading: 19 kB     
-Downloading: 27 kB     
-Downloading: 27 kB     
-Downloading: 35 kB     
-Downloading: 35 kB     
-Downloading: 43 kB     
-Downloading: 43 kB     
-Downloading: 51 kB     
-Downloading: 51 kB     
-Downloading: 59 kB     
-Downloading: 59 kB     
-Downloading: 66 kB     
-Downloading: 66 kB     
-Downloading: 66 kB     
-Downloading: 66 kB     
-Downloading: 66 kB     
-Downloading: 66 kB     
-Downloading: 74 kB     
-Downloading: 74 kB     
-Downloading: 83 kB     
-Downloading: 83 kB     
-Downloading: 91 kB     
-Downloading: 91 kB     
-Downloading: 96 kB     
-Downloading: 96 kB     
-Downloading: 96 kB     
-Downloading: 96 kB     
-Downloading: 96 kB     
-Downloading: 96 kB     
+Downloading: 14 kB     
+Downloading: 14 kB     
+Downloading: 14 kB     
+Downloading: 14 kB     
+Downloading: 14 kB     
+Downloading: 14 kB     
+Downloading: 22 kB     
+Downloading: 22 kB     
+Downloading: 22 kB     
+Downloading: 22 kB     
+Downloading: 22 kB     
+Downloading: 22 kB     
+Downloading: 30 kB     
+Downloading: 30 kB     
+Downloading: 30 kB     
+Downloading: 30 kB     
+Downloading: 30 kB     
+Downloading: 30 kB     
+Downloading: 38 kB     
+Downloading: 38 kB     
+Downloading: 38 kB     
+Downloading: 38 kB     
+Downloading: 38 kB     
+Downloading: 38 kB     
+Downloading: 46 kB     
+Downloading: 46 kB     
+Downloading: 46 kB     
+Downloading: 46 kB     
+Downloading: 46 kB     
+Downloading: 46 kB     
+Downloading: 54 kB     
+Downloading: 54 kB     
+Downloading: 54 kB     
+Downloading: 54 kB     
+Downloading: 54 kB     
+Downloading: 54 kB     
+Downloading: 62 kB     
+Downloading: 62 kB     
+Downloading: 62 kB     
+Downloading: 62 kB     
+Downloading: 62 kB     
+Downloading: 62 kB     
+Downloading: 71 kB     
+Downloading: 71 kB     
+Downloading: 71 kB     
+Downloading: 71 kB     
+Downloading: 71 kB     
+Downloading: 71 kB     
+Downloading: 79 kB     
+Downloading: 79 kB     
+Downloading: 79 kB     
+Downloading: 79 kB     
+Downloading: 79 kB     
+Downloading: 79 kB     
+Downloading: 87 kB     
+Downloading: 87 kB     
+Downloading: 87 kB     
+Downloading: 87 kB     
+Downloading: 87 kB     
+Downloading: 87 kB     
+Downloading: 95 kB     
+Downloading: 95 kB     
+Downloading: 95 kB     
+Downloading: 95 kB     
+Downloading: 95 kB     
+Downloading: 95 kB     
 Downloading: 100 kB     
 Downloading: 100 kB     
 Downloading: 100 kB     
@@ -1229,12 +1237,12 @@ Downloading: 180 kB
 Downloading: 180 kB     
 Downloading: 180 kB     
 Downloading: 180 kB     
-Downloading: 190 kB     
-Downloading: 190 kB     
-Downloading: 190 kB     
-Downloading: 190 kB     
-Downloading: 190 kB     
-Downloading: 190 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
 Downloading: 190 kB     
 Downloading: 190 kB     
 Downloading: 190 kB     
@@ -1259,12 +1267,12 @@ Downloading: 220 kB
 Downloading: 220 kB     
 Downloading: 220 kB     
 Downloading: 220 kB     
-Downloading: 230 kB     
-Downloading: 230 kB     
-Downloading: 230 kB     
-Downloading: 230 kB     
-Downloading: 230 kB     
-Downloading: 230 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
 Downloading: 230 kB     
 Downloading: 230 kB     
 Downloading: 230 kB     
@@ -1289,12 +1297,12 @@ Downloading: 260 kB
 Downloading: 260 kB     
 Downloading: 260 kB     
 Downloading: 260 kB     
-Downloading: 270 kB     
-Downloading: 270 kB     
-Downloading: 270 kB     
-Downloading: 270 kB     
-Downloading: 270 kB     
-Downloading: 270 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
 Downloading: 270 kB     
 Downloading: 270 kB     
 Downloading: 270 kB     
@@ -1355,12 +1363,12 @@ Downloading: 350 kB
 Downloading: 350 kB     
 Downloading: 350 kB     
 Downloading: 350 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
+Downloading: 350 kB     
+Downloading: 350 kB     
+Downloading: 350 kB     
+Downloading: 350 kB     
+Downloading: 350 kB     
+Downloading: 350 kB     
 Downloading: 360 kB     
 Downloading: 360 kB     
 Downloading: 360 kB     
@@ -1385,12 +1393,12 @@ Downloading: 390 kB
 Downloading: 390 kB     
 Downloading: 390 kB     
 Downloading: 390 kB     
-Downloading: 400 kB     
-Downloading: 400 kB     
-Downloading: 400 kB     
-Downloading: 400 kB     
-Downloading: 400 kB     
-Downloading: 400 kB     
+Downloading: 390 kB     
+Downloading: 390 kB     
+Downloading: 390 kB     
+Downloading: 390 kB     
+Downloading: 390 kB     
+Downloading: 390 kB     
 Downloading: 400 kB     
 Downloading: 400 kB     
 Downloading: 400 kB     
@@ -1415,12 +1423,12 @@ Downloading: 430 kB
 Downloading: 430 kB     
 Downloading: 430 kB     
 Downloading: 430 kB     
-Downloading: 440 kB     
-Downloading: 440 kB     
-Downloading: 440 kB     
-Downloading: 440 kB     
-Downloading: 440 kB     
-Downloading: 440 kB     
+Downloading: 430 kB     
+Downloading: 430 kB     
+Downloading: 430 kB     
+Downloading: 430 kB     
+Downloading: 430 kB     
+Downloading: 430 kB     
 Downloading: 440 kB     
 Downloading: 440 kB     
 Downloading: 440 kB     
@@ -1481,12 +1489,12 @@ Downloading: 520 kB
 Downloading: 520 kB     
 Downloading: 520 kB     
 Downloading: 520 kB     
-Downloading: 530 kB     
-Downloading: 530 kB     
-Downloading: 530 kB     
-Downloading: 530 kB     
-Downloading: 530 kB     
-Downloading: 530 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
 Downloading: 530 kB     
 Downloading: 530 kB     
 Downloading: 530 kB     
@@ -1511,12 +1519,12 @@ Downloading: 560 kB
 Downloading: 560 kB     
 Downloading: 560 kB     
 Downloading: 560 kB     
-Downloading: 570 kB     
-Downloading: 570 kB     
-Downloading: 570 kB     
-Downloading: 570 kB     
-Downloading: 570 kB     
-Downloading: 570 kB     
+Downloading: 560 kB     
+Downloading: 560 kB     
+Downloading: 560 kB     
+Downloading: 560 kB     
+Downloading: 560 kB     
+Downloading: 560 kB     
 Downloading: 570 kB     
 Downloading: 570 kB     
 Downloading: 570 kB     
@@ -1541,12 +1549,12 @@ Downloading: 600 kB
 Downloading: 600 kB     
 Downloading: 600 kB     
 Downloading: 600 kB     
-Downloading: 610 kB     
-Downloading: 610 kB     
-Downloading: 610 kB     
-Downloading: 610 kB     
-Downloading: 610 kB     
-Downloading: 610 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
 Downloading: 610 kB     
 Downloading: 610 kB     
 Downloading: 610 kB     
@@ -1607,12 +1615,12 @@ Downloading: 690 kB
 Downloading: 690 kB     
 Downloading: 690 kB     
 Downloading: 690 kB     
-Downloading: 700 kB     
-Downloading: 700 kB     
-Downloading: 700 kB     
-Downloading: 700 kB     
-Downloading: 700 kB     
-Downloading: 700 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
 Downloading: 700 kB     
 Downloading: 700 kB     
 Downloading: 700 kB     
@@ -1637,12 +1645,12 @@ Downloading: 730 kB
 Downloading: 730 kB     
 Downloading: 730 kB     
 Downloading: 730 kB     
-Downloading: 740 kB     
-Downloading: 740 kB     
-Downloading: 740 kB     
-Downloading: 740 kB     
-Downloading: 740 kB     
-Downloading: 740 kB     
+Downloading: 730 kB     
+Downloading: 730 kB     
+Downloading: 730 kB     
+Downloading: 730 kB     
+Downloading: 730 kB     
+Downloading: 730 kB     
 Downloading: 740 kB     
 Downloading: 740 kB     
 Downloading: 740 kB     
@@ -1667,12 +1675,12 @@ Downloading: 770 kB
 Downloading: 770 kB     
 Downloading: 770 kB     
 Downloading: 770 kB     
-Downloading: 780 kB     
-Downloading: 780 kB     
-Downloading: 780 kB     
-Downloading: 780 kB     
-Downloading: 780 kB     
-Downloading: 780 kB     
+Downloading: 770 kB     
+Downloading: 770 kB     
+Downloading: 770 kB     
+Downloading: 770 kB     
+Downloading: 770 kB     
+Downloading: 770 kB     
 Downloading: 780 kB     
 Downloading: 780 kB     
 Downloading: 780 kB     
@@ -1733,12 +1741,12 @@ Downloading: 860 kB
 Downloading: 860 kB     
 Downloading: 860 kB     
 Downloading: 860 kB     
-Downloading: 870 kB     
-Downloading: 870 kB     
-Downloading: 870 kB     
-Downloading: 870 kB     
-Downloading: 870 kB     
-Downloading: 870 kB     
+Downloading: 860 kB     
+Downloading: 860 kB     
+Downloading: 860 kB     
+Downloading: 860 kB     
+Downloading: 860 kB     
+Downloading: 860 kB     
 Downloading: 870 kB     
 Downloading: 870 kB     
 Downloading: 870 kB     
@@ -1763,12 +1771,12 @@ Downloading: 900 kB
 Downloading: 900 kB     
 Downloading: 900 kB     
 Downloading: 900 kB     
-Downloading: 910 kB     
-Downloading: 910 kB     
-Downloading: 910 kB     
-Downloading: 910 kB     
-Downloading: 910 kB     
-Downloading: 910 kB     
+Downloading: 900 kB     
+Downloading: 900 kB     
+Downloading: 900 kB     
+Downloading: 900 kB     
+Downloading: 900 kB     
+Downloading: 900 kB     
 Downloading: 910 kB     
 Downloading: 910 kB     
 Downloading: 910 kB     
@@ -1793,12 +1801,12 @@ Downloading: 940 kB
 Downloading: 940 kB     
 Downloading: 940 kB     
 Downloading: 940 kB     
-Downloading: 950 kB     
-Downloading: 950 kB     
-Downloading: 950 kB     
-Downloading: 950 kB     
-Downloading: 950 kB     
-Downloading: 950 kB     
+Downloading: 940 kB     
+Downloading: 940 kB     
+Downloading: 940 kB     
+Downloading: 940 kB     
+Downloading: 940 kB     
+Downloading: 940 kB     
 Downloading: 950 kB     
 Downloading: 950 kB     
 Downloading: 950 kB     
@@ -2093,6 +2101,12 @@ Downloading: 1.3 MB
 Downloading: 1.3 MB     
 Downloading: 1.3 MB     
 Downloading: 1.3 MB     
+Downloading: 1.3 MB     
+Downloading: 1.3 MB     
+Downloading: 1.3 MB     
+Downloading: 1.3 MB     
+Downloading: 1.3 MB     
+Downloading: 1.3 MB     
 Downloading: 1.4 MB     
 Downloading: 1.4 MB     
 Downloading: 1.4 MB     
@@ -2165,12 +2179,6 @@ Downloading: 1.4 MB
 Downloading: 1.4 MB     
 Downloading: 1.4 MB     
 Downloading: 1.4 MB     
-Downloading: 1.4 MB     
-Downloading: 1.4 MB     
-Downloading: 1.4 MB     
-Downloading: 1.4 MB     
-Downloading: 1.4 MB     
-Downloading: 1.4 MB     
 Downloading: 1.5 MB     
 Downloading: 1.5 MB     
 Downloading: 1.5 MB     
@@ -2243,6 +2251,12 @@ Downloading: 1.5 MB
 Downloading: 1.5 MB     
 Downloading: 1.5 MB     
 Downloading: 1.5 MB     
+Downloading: 1.6 MB     
+Downloading: 1.6 MB     
+Downloading: 1.6 MB     
+Downloading: 1.6 MB     
+Downloading: 1.6 MB     
+Downloading: 1.6 MB     
 Downloading: 1.6 MB     
 Downloading: 1.6 MB     
 Downloading: 1.6 MB     
@@ -2315,12 +2329,6 @@ Downloading: 1.6 MB
 Downloading: 1.6 MB     
 Downloading: 1.6 MB     
 Downloading: 1.6 MB     
-Downloading: 1.7 MB     
-Downloading: 1.7 MB     
-Downloading: 1.7 MB     
-Downloading: 1.7 MB     
-Downloading: 1.7 MB     
-Downloading: 1.7 MB     
 Downloading: 1.7 MB     
 Downloading: 1.7 MB     
 Downloading: 1.7 MB     
@@ -2523,7 +2531,25 @@ Downloading: 1.9 MB
 Downloading: 1.9 MB
 ```
 
+
 ```r
+# arquivo contendo a relação entre município e região de saúde (tableExport.csv)
+# baixado de https://sage.saude.gov.br/paineis/regiaoSaude/lista.php?output=html&
+# merge intermediário
+data_1_dt = merge(data_1_dt,
+                  fread('tableExport.csv',
+                    select = 4:5,
+                    encoding = 'UTF-8',
+                    col.names = c('ibge', 'saude')),
+                  by.x = 'estabelecimento_municipio_codigo',
+                  by.y = 'ibge')
+data_1_dt = data_1_dt[, saude := as.character(saude)]
+# merge final
+data_1_dt = merge(data_1_dt,
+                  data_health,
+                  by.x = 'saude',
+                  by.y = 'code_health_region') %>%
+            select(c(1:8))
 # head do df
 knitr::kable(head(data_1_dt)) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
@@ -2611,13 +2637,15 @@ knitr::kable(head(data_1_dt)) %>%
 </tbody>
 </table>
 
+
 ### Resolução 2.b)
 
 ```r
 # Quantidade de vacinados por região de saúde, segunda dose
 # Condicionalmente, a faixa de vacinação por região de saúde (alta ou baixa, em relação à mediana da distribuição de vacinações)
-data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<=median(N), faixa := 'baixa']
+data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<median(N), faixa := 'baixa']
 
+# head do df
 knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
@@ -2663,6 +2691,11 @@ knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
   </tr>
   <tr>
    <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> Área Sudoeste </td>
+   <td style="text-align:right;"> 133135 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
    <td style="text-align:left;"> 3ª Região de Saúde </td>
    <td style="text-align:right;"> 133762 </td>
   </tr>
@@ -2681,19 +2714,199 @@ knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
    <td style="text-align:left;"> 6ª Região de Saúde </td>
    <td style="text-align:right;"> 150511 </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> alta </td>
-   <td style="text-align:left;"> Rio Negro e Solimões </td>
-   <td style="text-align:right;"> 157187 </td>
-  </tr>
 </tbody>
 </table>
 
 ### Resolução 2.c)
 
+```r
+# instalação dos pacotes casso necessário via pacman e carregamentos destes
+pacman::p_load(dtplyr)
+
+data_1_dt_cut = lazy_dt(data_1_dt) %>%
+  filter(grepl('2', vacina_descricao_dose) == TRUE) %>% 
+  group_by(name_health_region) %>% 
+  summarize(N = n()) %>%
+  mutate(faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
+  group_by(faixa) %>%
+  arrange(N) %>%
+  slice(1:5) %>%
+  select(faixa, name_health_region, N) %>%
+  as_tibble()
+
+# head do df
+knitr::kable(data_1_dt_cut) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
+```
+
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> faixa </th>
+   <th style="text-align:left;"> name_health_region </th>
+   <th style="text-align:right;"> N </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> baixa </td>
+   <td style="text-align:left;"> Área Norte </td>
+   <td style="text-align:right;"> 37194 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> baixa </td>
+   <td style="text-align:left;"> Alto Acre </td>
+   <td style="text-align:right;"> 44032 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> baixa </td>
+   <td style="text-align:left;"> Regional Purus </td>
+   <td style="text-align:right;"> 63155 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> baixa </td>
+   <td style="text-align:left;"> Regional Juruá </td>
+   <td style="text-align:right;"> 71604 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> baixa </td>
+   <td style="text-align:left;"> Triângulo </td>
+   <td style="text-align:right;"> 90975 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> Área Sudoeste </td>
+   <td style="text-align:right;"> 133135 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> 3ª Região de Saúde </td>
+   <td style="text-align:right;"> 133762 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> Juruá e Tarauacá/Envira </td>
+   <td style="text-align:right;"> 148229 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> 5ª Região de Saúde </td>
+   <td style="text-align:right;"> 148814 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> alta </td>
+   <td style="text-align:left;"> 6ª Região de Saúde </td>
+   <td style="text-align:right;"> 150511 </td>
+  </tr>
+</tbody>
+</table>
 
 ### Resolução 2.d)
 
+```r
+p_load(microbenchmark, ggplot2)
+
+data_frame_func = function(){
+  data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N ,
+                            by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<median(N), faixa := 'baixa'][order(N), .SD[1:5], by = faixa]
+  
+}
+
+data_dtplyr_func = function(){
+  
+  data_1_dt_cut = lazy_dt(data_1_dt) %>%
+  filter(grepl('2', vacina_descricao_dose) == TRUE) %>% 
+  group_by(name_health_region) %>% 
+  summarize(N = n()) %>%
+  mutate(faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
+  group_by(faixa) %>%
+  arrange(N) %>%
+  slice(1:5) %>%
+  select(faixa, name_health_region, N) %>%
+  as_tibble()
+  
+}
+
+res = microbenchmark(data_frame_func, data_dtplyr_func, times = 5L)
+
+#tabela
+knitr::kable(res) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
+```
+
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> expr </th>
+   <th style="text-align:right;"> time </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> data_dtplyr_func </td>
+   <td style="text-align:right;"> 642 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_frame_func </td>
+   <td style="text-align:right;"> 460 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_dtplyr_func </td>
+   <td style="text-align:right;"> 60 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_dtplyr_func </td>
+   <td style="text-align:right;"> 26 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_frame_func </td>
+   <td style="text-align:right;"> 26 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_dtplyr_func </td>
+   <td style="text-align:right;"> 25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_dtplyr_func </td>
+   <td style="text-align:right;"> 25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_frame_func </td>
+   <td style="text-align:right;"> 25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_frame_func </td>
+   <td style="text-align:right;"> 25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data_frame_func </td>
+   <td style="text-align:right;"> 25 </td>
+  </tr>
+</tbody>
+</table>
+
+```r
+#plots
+boxplot(res)
+```
+
+![](list_1_files/figure-html/2.d-1.png)<!-- -->
+
+```r
+ggplot2::autoplot(res)
+```
+
+![](list_1_files/figure-html/2.d-2.png)<!-- -->
 
 
 

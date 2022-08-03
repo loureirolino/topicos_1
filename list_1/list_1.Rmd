@@ -261,7 +261,7 @@ knitr::kable(head(data_complete)) %>%
 ## Questão 2: manipulação de dados {.tabset .tabset-fade .tabset-pills}
 
 ### Resolução 2.a)
-```{r 2.a}
+```{r 2.a_parte_1, message=FALSE}
 # instalação dos pacotes casso necessário via pacman e carregamentos destes
 pacman::p_load(data.table, geobr)
 
@@ -272,6 +272,11 @@ l = lapply(files, fread,
            sep = ';')
 data_1_dt = rbindlist(l)
 
+# dados da saúde
+data_health = geobr::read_health_region(year = 2013, simplified = FALSE)
+```
+
+```{r 2.a_parte_2}
 # arquivo contendo a relação entre município e região de saúde (tableExport.csv)
 # baixado de https://sage.saude.gov.br/paineis/regiaoSaude/lista.php?output=html&
 # merge intermediário
@@ -285,7 +290,7 @@ data_1_dt = merge(data_1_dt,
 data_1_dt = data_1_dt[, saude := as.character(saude)]
 # merge final
 data_1_dt = merge(data_1_dt,
-                  invisible(geobr::read_health_region(year = 2013, simplified = FALSE)),
+                  data_health,
                   by.x = 'saude',
                   by.y = 'code_health_region') %>%
             select(c(1:8))
@@ -300,12 +305,14 @@ knitr::kable(head(data_1_dt)) %>%
 
 ```
 
+
 ### Resolução 2.b)
 ```{r 2.b}
 # Quantidade de vacinados por região de saúde, segunda dose
 # Condicionalmente, a faixa de vacinação por região de saúde (alta ou baixa, em relação à mediana da distribuição de vacinações)
-data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<=median(N), faixa := 'baixa']
+data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N , by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<median(N), faixa := 'baixa']
 
+# head do df
 knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = TRUE,
@@ -320,15 +327,71 @@ knitr::kable(data_1_dt_cut[order(N), .SD[1:5], by = faixa]) %>%
 ```{r 2.c}
 # instalação dos pacotes casso necessário via pacman e carregamentos destes
 pacman::p_load(dtplyr)
+
+data_1_dt_cut = lazy_dt(data_1_dt) %>%
+  filter(grepl('2', vacina_descricao_dose) == TRUE) %>% 
+  group_by(name_health_region) %>% 
+  summarize(N = n()) %>%
+  mutate(faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
+  group_by(faixa) %>%
+  arrange(N) %>%
+  slice(1:5) %>%
+  select(faixa, name_health_region, N) %>%
+  as_tibble()
+
+# head do df
+knitr::kable(data_1_dt_cut) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
+
 ```
 
 ### Resolução 2.d)
 ```{r 2.d}
+p_load(microbenchmark, ggplot2)
 
+data_frame_func = function(){
+  data_1_dt_cut = data_1_dt[grepl('2', vacina_descricao_dose), .N ,
+                            by = .(name_health_region)][N>=median(N), faixa := 'alta'][N<median(N), faixa := 'baixa'][order(N), .SD[1:5], by = faixa]
+  
+}
+
+data_dtplyr_func = function(){
+  
+  data_1_dt_cut = lazy_dt(data_1_dt) %>%
+  filter(grepl('2', vacina_descricao_dose) == TRUE) %>% 
+  group_by(name_health_region) %>% 
+  summarize(N = n()) %>%
+  mutate(faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
+  group_by(faixa) %>%
+  arrange(N) %>%
+  slice(1:5) %>%
+  select(faixa, name_health_region, N) %>%
+  as_tibble()
+  
+}
+
+res = microbenchmark(data_frame_func, data_dtplyr_func, times = 5L)
+
+#tabela
+knitr::kable(res) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
+#plots
+boxplot(res)
+ggplot2::autoplot(res)
 ```
 
 ```{r cleanup, include=FALSE}
-#rm(list = ls())
-#gc()
+rm(list = ls())
+gc()
 ```
 
