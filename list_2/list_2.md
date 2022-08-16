@@ -47,6 +47,7 @@ always_allow_html: true
 ```r
 #### Funções Customizadas ####
 
+
 # função para popular o DB
 db_populate = function(table_name, append_func){
   # checando se o diretório existe e se necessário criá-lo para o SQLite
@@ -95,6 +96,7 @@ p_load(dplyr, tidyverse, rmdformats, stringr,
        vroom, mongolite, RSQLite, DBI, dbplyr,
        data.table, geobr, sf, glue)
 
+
 # populando o banco
 # criando as tables e suas respectivas colunas
 # primeira table
@@ -133,6 +135,7 @@ db_populate('saude', saude)
 # populando o banco
 # criando as tables e suas respectivas colunas
 # segunda table
+
 geobr = function(){
   data_health = invisible(geobr::read_health_region(year = 2013, simplified = FALSE))
   data_health = st_set_geometry(data_health, NULL) #removendo os dados geo-espaciais (erro ao dar append.....)
@@ -145,6 +148,7 @@ db_populate('geobr', geobr)
 # # populando o banco
 # # criando as tables e suas respectivas colunas
 # # terceira table
+
 ibge = function(){
   df = fread('list_1/tableExport.csv',
              select = 2:6,
@@ -159,6 +163,7 @@ db_populate('ibge', ibge)
 # checando tables e suas colunas
 for (item in dbListTables(conn)){
   print(paste('Nome da tabela:', item))
+
   print(paste('Nrows:', nrow(dbReadTable(conn, item))))
   print(dbListFields(conn, item))
 }

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Aug 16 04:52:39 UTC 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0182-a4ff-1dba-00001022c2e8 
-on database directory memory:/home/rstudio/projects/topicos_1/databaseName=metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@55bcb43c 
+Tue Aug 16 05:18:35 UTC 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0182-a516-dd42-0000107d6260 
+on database directory memory:/home/rstudio/projects/topicos_1/databaseName=metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@37c02a97 
 Loaded from file:/home/rstudio/spark/spark-2.4.5-bin-hadoop2.7/jars/derby-10.12.1.1.jar
 java.vendor=Private Build
 java.runtime.version=1.8.0_312-8u312-b07-0ubuntu1~20.04-b07

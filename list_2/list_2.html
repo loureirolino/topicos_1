@@ -235,38 +235,39 @@
 <strong>4.</strong> As pastas com arquivos baixados foram configuradas para não serem integradas ao github, para evitar subir um volume desnecessário de arquivos, assim como os bancos.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### Funções Customizadas ####</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># função para popular o DB</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>db_populate <span class="ot">=</span> <span class="cf">function</span>(table_name, append_func){</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># checando se o diretório existe e se necessário criá-lo para o SQLite</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  dir_name <span class="ot">=</span> <span class="st">&#39;list_2/dados&#39;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(dir_name) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dir.create</span>(dir_name)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># conexão com o &#39;banco&#39; SQLite</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">c</span>(<span class="st">&#39;conn&#39;</span>) <span class="sc">%in%</span> <span class="fu">ls</span>() <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;&amp;</span> <span class="fu">is.null</span>(conn) <span class="sc">==</span> <span class="cn">FALSE</span>){</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">source</span>(<span class="st">&#39;list_2/conn/conn_sqlite.R&#39;</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># checagem table</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (table_name <span class="sc">%in%</span> <span class="fu">dbListTables</span>(conn)){</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">append_func</span>()</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># implementação do slice para DB (https://stackoverflow.com/questions/59217666/dbplyr-dplyr-and-functions-with-no-sql-equivalents-eg-slice)</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>slice.tbl_sql <span class="ot">&lt;-</span> <span class="cf">function</span>(.data, ...) {</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  rows <span class="ot">&lt;-</span> <span class="fu">c</span>(...)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  .data <span class="sc">%&gt;%</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">...row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(...row_id <span class="sc">%in%</span> <span class="sc">!!</span>rows) <span class="sc">%&gt;%</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>...row_id)</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># função para popular o DB</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>db_populate <span class="ot">=</span> <span class="cf">function</span>(table_name, append_func){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># checando se o diretório existe e se necessário criá-lo para o SQLite</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  dir_name <span class="ot">=</span> <span class="st">&#39;list_2/dados&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">file.exists</span>(dir_name) <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dir.create</span>(dir_name)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># conexão com o &#39;banco&#39; SQLite</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">c</span>(<span class="st">&#39;conn&#39;</span>) <span class="sc">%in%</span> <span class="fu">ls</span>() <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;&amp;</span> <span class="fu">is.null</span>(conn) <span class="sc">==</span> <span class="cn">FALSE</span>){</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">source</span>(<span class="st">&#39;list_2/conn/conn_sqlite.R&#39;</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># checagem table</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (table_name <span class="sc">%in%</span> <span class="fu">dbListTables</span>(conn)){</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invisible</span>()</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">append_func</span>()</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># implementação do slice para DB (https://stackoverflow.com/questions/59217666/dbplyr-dplyr-and-functions-with-no-sql-equivalents-eg-slice)</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>slice.tbl_sql <span class="ot">&lt;-</span> <span class="cf">function</span>(.data, ...) {</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  rows <span class="ot">&lt;-</span> <span class="fu">c</span>(...)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  .data <span class="sc">%&gt;%</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">...row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(...row_id <span class="sc">%in%</span> <span class="sc">!!</span>rows) <span class="sc">%&gt;%</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>...row_id)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="questões" class="section level1">
 <h1>Questões</h1>
@@ -280,73 +281,77 @@
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>       vroom, mongolite, RSQLite, DBI, dbplyr,</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>       data.table, geobr, sf, glue)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># populando o banco</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># criando as tables e suas respectivas colunas</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># primeira table</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>saude <span class="ot">=</span> <span class="cf">function</span>(){</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbSendStatement</span>(</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  conn,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;CREATE TABLE saude(</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;estabelecimento_uf&quot;,</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;vacina_descricao_dose&quot;,</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;estabelecimento_municipio_codigo&quot;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">                      )&#39;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">=</span> <span class="fu">list.files</span>(<span class="st">&#39;list_1/dados&#39;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  data_saude <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">&#39;,&#39;</span>, <span class="at">replacement =</span> <span class="st">&#39; &#39;</span>, <span class="fu">toString</span>(files)))),</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&#39;document_id&#39;</span>, <span class="st">&#39;paciente_id&#39;</span>, <span class="st">&#39;paciente_idade&#39;</span>, <span class="st">&#39;paciente_dataNascimento&#39;</span>,</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_enumSexoBiologico&#39;</span>, <span class="st">&#39;paciente_racaCor_codigo&#39;</span>, <span class="st">&#39;paciente_racaCor_valor&#39;</span>,</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_endereco_coIbgeMunicipio&#39;</span>, <span class="st">&#39;paciente_endereco_coPais&#39;</span>, <span class="st">&#39;paciente_endereco_nmMunicipio&#39;</span>,</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_endereco_nmPais&#39;</span>, <span class="st">&#39;paciente_endereco_uf&#39;</span>, <span class="st">&#39;paciente_endereco_cep&#39;</span>,</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_nacionalidade_enumNacionalidade&#39;</span>, <span class="st">&#39;estabelecimento_valor&#39;</span>,</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_razaoSocial&#39;</span>, <span class="st">&#39;estalecimento_noFantasia&#39;</span>,</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_municipio_codigo&#39;</span>, <span class="st">&#39;estabelecimento_municipio_nome&#39;</span>,</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_uf&#39;</span>, <span class="st">&#39;vacina_grupoAtendimento_codigo&#39;</span>,</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_grupoAtendimento_nome&#39;</span>, <span class="st">&#39;vacina_categoria_codigo&#39;</span>, <span class="st">&#39;vacina_categoria_nome&#39;</span>, <span class="st">&#39;vacina_lote&#39;</span>,</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_fabricante_nome&#39;</span>, <span class="st">&#39;vacina_fabricante_referencia&#39;</span>, <span class="st">&#39;vacina_dataAplicacao&#39;</span>,</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_descricao_dose&#39;</span>, <span class="st">&#39;vacina_codigo&#39;</span>, <span class="st">&#39;vacina_nome&#39;</span>, <span class="st">&#39;sistema_origem&#39;</span>),</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">&#39;estabelecimento_uf&#39;</span>, <span class="st">&#39;vacina_descricao_dose&#39;</span>, <span class="st">&#39;estabelecimento_municipio_codigo&#39;</span>),</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                      <span class="co">#locale = locale(&quot;br&quot;,encoding = &quot;latin1&quot;),</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;saude&#39;</span>, data_saude)</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;saude&#39;</span>, saude)</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co"># populando o banco</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># criando as tables e suas respectivas colunas</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># segunda table</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>geobr <span class="ot">=</span> <span class="cf">function</span>(){</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  data_health <span class="ot">=</span> <span class="fu">invisible</span>(geobr<span class="sc">::</span><span class="fu">read_health_region</span>(<span class="at">year =</span> <span class="dv">2013</span>, <span class="at">simplified =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  data_health <span class="ot">=</span> <span class="fu">st_set_geometry</span>(data_health, <span class="cn">NULL</span>) <span class="co">#removendo os dados geo-espaciais (erro ao dar append.....)</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbCreateTable</span>(conn, <span class="st">&#39;geobr&#39;</span>, data_health)</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;geobr&#39;</span>, data_health)</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;geobr&#39;</span>, geobr)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># populando o banco</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># criando as tables e suas respectivas colunas</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># primeira table</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>saude <span class="ot">=</span> <span class="cf">function</span>(){</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbSendStatement</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  conn,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;CREATE TABLE saude(</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;estabelecimento_uf&quot;,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;vacina_descricao_dose&quot;,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">                      &quot;estabelecimento_municipio_codigo&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">                      )&#39;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">=</span> <span class="fu">list.files</span>(<span class="st">&#39;list_1/dados&#39;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  data_saude <span class="ot">=</span> <span class="fu">vroom</span>(<span class="fu">pipe</span>(<span class="fu">paste0</span>(<span class="st">&#39;grep -wi Janssen &#39;</span>, <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">&#39;,&#39;</span>, <span class="at">replacement =</span> <span class="st">&#39; &#39;</span>, <span class="fu">toString</span>(files)))),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&#39;document_id&#39;</span>, <span class="st">&#39;paciente_id&#39;</span>, <span class="st">&#39;paciente_idade&#39;</span>, <span class="st">&#39;paciente_dataNascimento&#39;</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_enumSexoBiologico&#39;</span>, <span class="st">&#39;paciente_racaCor_codigo&#39;</span>, <span class="st">&#39;paciente_racaCor_valor&#39;</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_endereco_coIbgeMunicipio&#39;</span>, <span class="st">&#39;paciente_endereco_coPais&#39;</span>, <span class="st">&#39;paciente_endereco_nmMunicipio&#39;</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_endereco_nmPais&#39;</span>, <span class="st">&#39;paciente_endereco_uf&#39;</span>, <span class="st">&#39;paciente_endereco_cep&#39;</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;paciente_nacionalidade_enumNacionalidade&#39;</span>, <span class="st">&#39;estabelecimento_valor&#39;</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_razaoSocial&#39;</span>, <span class="st">&#39;estalecimento_noFantasia&#39;</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_municipio_codigo&#39;</span>, <span class="st">&#39;estabelecimento_municipio_nome&#39;</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;estabelecimento_uf&#39;</span>, <span class="st">&#39;vacina_grupoAtendimento_codigo&#39;</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_grupoAtendimento_nome&#39;</span>, <span class="st">&#39;vacina_categoria_codigo&#39;</span>, <span class="st">&#39;vacina_categoria_nome&#39;</span>, <span class="st">&#39;vacina_lote&#39;</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_fabricante_nome&#39;</span>, <span class="st">&#39;vacina_fabricante_referencia&#39;</span>, <span class="st">&#39;vacina_dataAplicacao&#39;</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;vacina_descricao_dose&#39;</span>, <span class="st">&#39;vacina_codigo&#39;</span>, <span class="st">&#39;vacina_nome&#39;</span>, <span class="st">&#39;sistema_origem&#39;</span>),</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">&#39;estabelecimento_uf&#39;</span>, <span class="st">&#39;vacina_descricao_dose&#39;</span>, <span class="st">&#39;estabelecimento_municipio_codigo&#39;</span>),</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                      <span class="co">#locale = locale(&quot;br&quot;,encoding = &quot;latin1&quot;),</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_threads =</span> <span class="dv">3</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;saude&#39;</span>, data_saude)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;saude&#39;</span>, saude)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># populando o banco</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># criando as tables e suas respectivas colunas</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># segunda table</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>geobr <span class="ot">=</span> <span class="cf">function</span>(){</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  data_health <span class="ot">=</span> <span class="fu">invisible</span>(geobr<span class="sc">::</span><span class="fu">read_health_region</span>(<span class="at">year =</span> <span class="dv">2013</span>, <span class="at">simplified =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  data_health <span class="ot">=</span> <span class="fu">st_set_geometry</span>(data_health, <span class="cn">NULL</span>) <span class="co">#removendo os dados geo-espaciais (erro ao dar append.....)</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbCreateTable</span>(conn, <span class="st">&#39;geobr&#39;</span>, data_health)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;geobr&#39;</span>, data_health)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co"># # populando o banco</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co"># # criando as tables e suas respectivas colunas</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co"># # terceira table</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>ibge <span class="ot">=</span> <span class="cf">function</span>(){</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&#39;list_1/tableExport.csv&#39;</span>,</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>             <span class="at">select =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>,</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>            <span class="at">encoding =</span> <span class="st">&#39;UTF-8&#39;</span>,</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&#39;uf&#39;</span>, <span class="st">&#39;municipio&#39;</span>,  <span class="st">&#39;ibge&#39;</span>, <span class="st">&#39;cod_saude&#39;</span>, <span class="st">&#39;nome_saude&#39;</span>))</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbCreateTable</span>(conn, <span class="st">&#39;ibge&#39;</span>, df)</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;ibge&#39;</span>, df)</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;ibge&#39;</span>, ibge)</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="co"># checando tables e suas colunas</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (item <span class="cf">in</span> <span class="fu">dbListTables</span>(conn)){</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;Nome da tabela:&#39;</span>, item))</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;Nrows:&#39;</span>, <span class="fu">nrow</span>(<span class="fu">dbReadTable</span>(conn, item))))</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">dbListFields</span>(conn, item))</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;geobr&#39;</span>, geobr)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co"># # populando o banco</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co"># # criando as tables e suas respectivas colunas</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># # terceira table</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>ibge <span class="ot">=</span> <span class="cf">function</span>(){</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&#39;list_1/tableExport.csv&#39;</span>,</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>             <span class="at">select =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>            <span class="at">encoding =</span> <span class="st">&#39;UTF-8&#39;</span>,</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&#39;uf&#39;</span>, <span class="st">&#39;municipio&#39;</span>,  <span class="st">&#39;ibge&#39;</span>, <span class="st">&#39;cod_saude&#39;</span>, <span class="st">&#39;nome_saude&#39;</span>))</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbCreateTable</span>(conn, <span class="st">&#39;ibge&#39;</span>, df)</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbAppendTable</span>(conn, <span class="st">&#39;ibge&#39;</span>, df)</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="fu">db_populate</span>(<span class="st">&#39;ibge&#39;</span>, ibge)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co"># checando tables e suas colunas</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (item <span class="cf">in</span> <span class="fu">dbListTables</span>(conn)){</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;Nome da tabela:&#39;</span>, item))</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;Nrows:&#39;</span>, <span class="fu">nrow</span>(<span class="fu">dbReadTable</span>(conn, item))))</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">dbListFields</span>(conn, item))</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;Nome da tabela: geobr&quot;
 ## [1] &quot;Nrows: 438&quot;
 ## [1] &quot;code_health_region&quot; &quot;name_health_region&quot; &quot;code_state&quot;        
