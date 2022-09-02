@@ -37,14 +37,24 @@ editor: source
 :::
 :::
 
+## Tech
+
+* Docker
+* Rstudio
+* Jupyterlab
+* Windows Subsystem for Linux
+
 <b> São ambas soluções </b>
+
+## Docker
+
+## Estrutura do Rstudio Cloud
 
 ## Rstudio Cloud
 
 ::: columns
 ::: {.column width="50%"}
-### Vantagens
-
+#### Vantagens  
 -   No feed/subscription;
 -   Public web service (RStudio IDE);
 -   Compartilhamento
@@ -53,49 +63,59 @@ editor: source
 :::
 
 ::: {.column width="50%"}
-### Desvantagens
-
+#### Desvantagens
 -   Restrição física da máquina (RAM, CPU, HDD);
 -   Restrição mensal de workload (horas/projeto);
+-   Escalonamento;
 :::
 :::
-
-## Google Colab
-
-::: columns ::: {.column width="50%"} \### Vantagens \* No feed/subscription; \* Public web service (Jupyterlab IDE); \* Compartilhamento; \* Suporte a GPU; \* Python & R kernels; :::
-
-::: {.column width="50%"}
-### Desvantagens
-
--   Persitência (dados e pacotes)
--   Restição física
-:::
-
-:::
-
-## Google Colab e seus kernels
-
-Podemos optar pela linguagem de programação que iremos usar no
-
-## Estrutura do Rstudio Cloud
-
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
 
 ## Mitigando os "problemas" - Rstudio Cloud
 
 ## Estrutura do Google Colab
 
+## Google Colab
+
+::: columns 
+::: {.column width="50%"}
+### Vantagens
+-   No feed/subscription; 
+-   Public web service (Jupyterlab IDE); 
+-   Compartilhamento; 
+-   Suporte a GPU (plano pago); 
+-   Python & R kernels;
+:::
+
+::: {.column width="50%"}
+#### Desvantagens
+-   Persitência (dados e pacotes)
+-   Restição física
+:::
+:::
+
+## Google Colab e seus kernels
+
+Podemos optar pela linguagem de programação que iremos usar no jupyterlab na sessão destinada ao runtime (kernel)
+
+
 ## Mitigando os "problemas" - Rstudio Cloud
 
-When you click the **Render** button a document will be generated that includes:
+## Solução Customizada????
 
--   Content authored with markdown
--   Output from executable code
+## Solução Customizada - Pequena/Média Escala
 
-## Code
+Vamos dar deploy em uma solução customizada usando docker como base para um Rstudio Server!!!!
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+Pre-requesitos:  
+-   Computador com uma configuração razoável (RAM, CPU);  
+-   Conexão estável com a internet e segura;  
+-   Energia;  
 
-```{r}
-1 + 1
-```
+Vantagens:  
+-   Web service    
+-   Confuruação da máquina mais robusta  
+-   Free!!!!!!!!!!  
+
+Desvantagem:  
+-   "Custo" de manutenção;  
+-   Curva de aprendizado (bem suavel!!!!!!)  
