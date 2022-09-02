@@ -14,7 +14,7 @@
   <meta name="author" content="Lucas Loureiro">
   <meta name="author" content="Rafael Ramos">
   <meta name="author" content="Vinicius Paiva">
-  <title>Google Colab &amp; Rstudio Cloud</title>
+  <title>quarto-input5b5fc882</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -331,7 +331,9 @@
     <div class="slides">
 
 <section id="title-slide" class="center">
-  <h1 class="title">Google Colab &amp; Rstudio Cloud</h1>
+  <h1 class="title"><p>Google Colab<br>
+&amp;<br>
+Rstudio Cloud</p></h1>
   <p class="author">Ana Clara</p>
   <p class="author">Gabriela Monteiro</p>
   <p class="author">Lucas Loureiro</p>
@@ -343,49 +345,74 @@
 <h2>Início</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><a href="https://rstudio.cloud/">Rstudio Cloud</a></p>
+<p><a href="https://rstudio.cloud/">Rstudio Cloud</a> <img data-src="www/logo_rstudio_cloud.png" width="500"></p>
 </div><div class="column" style="width:50%;">
-<p><a href="https://colab.research.google.com/">Google Colab</a></p>
+<p><a href="https://colab.research.google.com/">Google Colab</a> <img data-src="www/logo_google_colab.png" width="500"></p>
 </div>
 </div>
-<p><b> Qual escolher? </b></p>
-</section>
-<section id="tech" class="slide level2">
-<h2>Tech</h2>
+<center>
+“There ain’t no such thing as a free lunch.”<sup>1</sup>
+</center>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Milton Friedman</p></li></ol></aside></section>
+<section id="características-comuns" class="slide level2">
+<h2>Características Comuns</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h5 id="vantagens">Vantagens</h5>
 <ul>
-<li>Docker</li>
-<li>Rstudio</li>
-<li>Jupyterlab</li>
-<li>Windows Subsystem for Linux</li>
+<li>No feed/subscription;</li>
+<li>Public web service;</li>
+<li>Compartilhamento;</li>
+<li>Allow multiple projects;</li>
+<li>Classroom integration (assembly);</li>
 </ul>
+</div><div class="column" style="width:50%;">
+<h5 id="desvantagens">Desvantagens</h5>
+<ul>
+<li>Restrição física da máquina (RAM, CPU, HDD);</li>
+<li>Escalonamento;</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="tech-stack" class="slide level2">
+<h2>Tech Stack</h2>
+<p><br></p>
+<p><img data-src="www/logo_docker.png" width="250" alt="Docker"> <img data-src="www/logo_rstudio.png" width="250" alt="Rstudio"> <img data-src="www/logo_jupyterlab.png" width="250" alt="Jupyterlab"> <img data-src="www/logo_wsl.png" width="250" alt="Windows Subsystem for Linux"></p>
+<!--
+* [Docker](https://www.docker.com) ![](www/logo_docker.png){width=200px}
+* [Rstudio](https://www.rstudio.com) ![](www/logo_rstudio.png){width=200px}
+* [Jupyterlab](https://jupyter.org) ![](www/logo_jupyterlab.png){width=200px}
+* [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) ![](www/logo_wsl.png){width=200px}
+-->
+</section>
+<section id="virtual-machines" class="slide level2">
+<h2>Virtual Machines</h2>
+<p>[VMs]<a href="https://www.vmware.com/topics/glossary/content/virtual-machine.html" class="uri">https://www.vmware.com/topics/glossary/content/virtual-machine.html</a></p>
 </section>
 <section id="docker" class="slide level2">
 <h2>Docker</h2>
-<p>Apresentar o DOCKER!!!!!</p>
+<p>Apresentar o DOCKER!!!!! <a href="https://www.docker.com/resources/what-container/">Docker</a></p>
 </section>
 <section id="estrutura-do-rstudio-cloud" class="slide level2">
-<h2>Estrutura do Rstudio Cloud</h2>
-</section>
-<section id="docker-1" class="slide level2">
-<h2>Docker</h2>
-</section>
-<section id="estrutura-do-rstudio-cloud-1" class="slide level2">
 <h2>Estrutura do Rstudio Cloud</h2>
 </section>
 <section id="rstudio-cloud" class="slide level2">
 <h2>Rstudio Cloud</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h4 id="vantagens">Vantagens</h4>
+<h5 id="vantagens-1">Vantagens</h5>
 <ul>
 <li>No feed/subscription;</li>
 <li>Public web service (RStudio IDE);</li>
 <li>Compartilhamento</li>
-<li>Allow multipĺe projects;</li>
+<li>Allow multiple projects;</li>
 <li>Persistence;</li>
+<li>Classroom integration (assembly);</li>
+<li>Escolher qual a versão do R deseja;</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<h4 id="desvantagens">Desvantagens</h4>
+<h5 id="desvantagens-1">Desvantagens</h5>
 <ul>
 <li>Restrição física da máquina (RAM, CPU, HDD);</li>
 <li>Restrição mensal de workload (horas/projeto);</li>
@@ -404,7 +431,7 @@
 <h2>Google Colab</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="vantagens-1">Vantagens</h3>
+<h5 id="vantagens-2">Vantagens</h5>
 <ul>
 <li>No feed/subscription;</li>
 <li>Public web service (Jupyterlab IDE);</li>
@@ -413,7 +440,7 @@
 <li>Python &amp; R kernels;</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<h4 id="desvantagens-1">Desvantagens</h4>
+<h5 id="desvantagens-2">Desvantagens</h5>
 <ul>
 <li>Persitência (dados e pacotes)</li>
 <li>Restrição física</li>
@@ -475,9 +502,10 @@
 - Curva de aprendizado (bem suavel!!!!!!)</p>
 
 <img src="www/logo-UnB.png" class="slide-logo r-stretch"><div class="footer footer-default">
-<p><a href="http://gmail.com" class="uri">http://gmail.com</a></p>
+
 </div>
 </section>
+
     </div>
   </div>
 

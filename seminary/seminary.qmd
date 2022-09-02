@@ -1,5 +1,8 @@
 ---
-title: "Google Colab & Rstudio Cloud"
+title: |
+  | Google Colab
+  | &
+  | Rstudio Cloud
 #subtitle: "Soluções Plug and Play"
 author: 
   - name: Ana Clara  
@@ -21,7 +24,7 @@ format:
     preview-links: auto
     css: www/style.css
     logo: www/logo-UnB.png
-    footer: <http://gmail.com> 
+    #footer: <http://repo_address> 
 editor: source
 ---
 
@@ -30,49 +33,82 @@ editor: source
 ::: columns
 ::: {.column width="50%"}
 [Rstudio Cloud](https://rstudio.cloud/)
+![](www/logo_rstudio_cloud.png){width=500px}
 :::
 
 ::: {.column width="50%"}
 [Google Colab](https://colab.research.google.com/)
+![](www/logo_google_colab.png){width=500px}
 :::
 :::
 
+<center>
+"There ain't no such thing as a free lunch."^[Milton Friedman]
+</center>
 
-<b> Qual escolher? </b>
+## Características Comuns
 
-## Tech
+::: columns
+::: {.column width="50%"}
+##### Vantagens  
+-   No feed/subscription;
+-   Public web service;
+-   Compartilhamento;
+-   Allow multiple projects;
+-   Classroom integration (assembly);
+:::
 
-* Docker
-* Rstudio
-* Jupyterlab
-* Windows Subsystem for Linux
+::: {.column width="50%"}
+##### Desvantagens
+-   Restrição física da máquina (RAM, CPU, HDD);
+-   Escalonamento;
+:::
+:::
+
+## Tech Stack
+
+<br>
+
+![Docker](www/logo_docker.png){width=250px}
+![Rstudio](www/logo_rstudio.png){width=250px}
+![Jupyterlab](www/logo_jupyterlab.png){width=250px}
+![Windows Subsystem for Linux](www/logo_wsl.png){width=250px}
+
+<!--
+* [Docker](https://www.docker.com) ![](www/logo_docker.png){width=200px}
+* [Rstudio](https://www.rstudio.com) ![](www/logo_rstudio.png){width=200px}
+* [Jupyterlab](https://jupyter.org) ![](www/logo_jupyterlab.png){width=200px}
+* [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) ![](www/logo_wsl.png){width=200px}
+-->
+
+## Virtual Machines
+[VMs]<https://www.vmware.com/topics/glossary/content/virtual-machine.html>
 
 
 ## Docker
 
 Apresentar o DOCKER!!!!!
+[Docker](https://www.docker.com/resources/what-container/)
 
 ## Estrutura do Rstudio Cloud
 
-
-## Docker
-
-## Estrutura do Rstudio Cloud
 
 ## Rstudio Cloud
 
 ::: columns
 ::: {.column width="50%"}
-#### Vantagens  
+##### Vantagens  
 -   No feed/subscription;
 -   Public web service (RStudio IDE);
 -   Compartilhamento
--   Allow multipĺe projects;
+-   Allow multiple projects;
 -   Persistence;
+-   Classroom integration (assembly);
+-   Escolher qual a versão do R deseja;
 :::
 
 ::: {.column width="50%"}
-#### Desvantagens
+##### Desvantagens
 -   Restrição física da máquina (RAM, CPU, HDD);
 -   Restrição mensal de workload (horas/projeto);
 -   Escalonamento;
@@ -87,7 +123,7 @@ Apresentar o DOCKER!!!!!
 
 ::: columns 
 ::: {.column width="50%"}
-### Vantagens
+##### Vantagens
 -   No feed/subscription; 
 -   Public web service (Jupyterlab IDE); 
 -   Compartilhamento; 
@@ -96,7 +132,7 @@ Apresentar o DOCKER!!!!!
 :::
 
 ::: {.column width="50%"}
-#### Desvantagens
+##### Desvantagens
 -   Persitência (dados e pacotes)
 -   Restrição física
 -   Escalonamento
