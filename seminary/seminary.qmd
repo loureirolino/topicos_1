@@ -37,6 +37,7 @@ editor: source
 :::
 :::
 
+
 <b> Qual escolher? </b>
 
 ## Tech
@@ -46,9 +47,15 @@ editor: source
 * Jupyterlab
 * Windows Subsystem for Linux
 
+
 ## Docker
 
 Apresentar o DOCKER!!!!!
+
+## Estrutura do Rstudio Cloud
+
+
+## Docker
 
 ## Estrutura do Rstudio Cloud
 
@@ -101,13 +108,16 @@ Apresentar o DOCKER!!!!!
 Podemos optar pela linguagem de programação que iremos usar no jupyterlab na sessão destinada ao runtime (kernel)
 
 
+
 ## Mitigando os "problemas" - Google Colab
+
 
 -   Plano pago
 -   Persistência (via mount do google Drive)
 -   
 
 ## Solução Customizada????
+
 
 ## Solução Customizada - Pequena/Média Escala
 
@@ -135,3 +145,23 @@ Desvantagem:
 
 Ilustrando agora uma solução customizada usando docker e jupyterlab
 (Apenas mostrar funcionando, deploy bastante complexo...)
+
+
+## Solução Customizada - Pequena/Média Escala
+
+Vamos dar deploy em uma solução customizada usando docker como base para um Rstudio Server!!!!
+
+Pre-requesitos:  
+-   Computador com uma configuração razoável (RAM, CPU);  
+-   Conexão estável com a internet e segura;  
+-   Energia;  
+
+Vantagens:  
+-   Web service    
+-   Confuruação da máquina mais robusta  
+-   Free!!!!!!!!!!  
+
+Desvantagem:  
+-   "Custo" de manutenção;  
+-   Curva de aprendizado (bem suavel!!!!!!)  
+
