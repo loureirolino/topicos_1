@@ -1,0 +1,101 @@
+---
+title: "Google Colab & Rstudio Cloud"
+#subtitle: "Soluções Plug and Play"
+author: 
+  - name: Ana Clara  
+  - name: Gabriela Monteiro  
+  - name: Lucas Loureiro  
+  - name: Rafael Ramos  
+  - name: Vinicius Paiva
+# title-slide-attributes:
+#     data-background-image: "/path/to/image"
+#     data-background-size: contain
+#     data-background-opacity: "0.45"
+highlight-style: pygments
+format: 
+  revealjs:
+    theme: [night]
+    slide-number: true
+    chalkboard:
+      buttons: true
+    preview-links: auto
+    css: www/style.css
+    logo: www/logo-UnB.png
+    footer: <http://gmail.com> 
+editor: source
+---
+
+## Início
+
+::: columns
+::: {.column width="50%"}
+[Rstudio Cloud](https://rstudio.cloud/)
+:::
+
+::: {.column width="50%"}
+[Google Colab](https://colab.research.google.com/)
+:::
+:::
+
+<b> São ambas soluções </b>
+
+## Rstudio Cloud
+
+::: columns
+::: {.column width="50%"}
+### Vantagens
+
+-   No feed/subscription;
+-   Public web service (RStudio IDE);
+-   Compartilhamento
+-   Allow multipĺe projects;
+-   Persistence;
+:::
+
+::: {.column width="50%"}
+### Desvantagens
+
+-   Restrição física da máquina (RAM, CPU, HDD);
+-   Restrição mensal de workload (horas/projeto);
+:::
+:::
+
+## Google Colab
+
+::: columns ::: {.column width="50%"} \### Vantagens \* No feed/subscription; \* Public web service (Jupyterlab IDE); \* Compartilhamento; \* Suporte a GPU; \* Python & R kernels; :::
+
+::: {.column width="50%"}
+### Desvantagens
+
+-   Persitência (dados e pacotes)
+-   Restição física
+:::
+
+:::
+
+## Google Colab e seus kernels
+
+Podemos optar pela linguagem de programação que iremos usar no
+
+## Estrutura do Rstudio Cloud
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Mitigando os "problemas" - Rstudio Cloud
+
+## Estrutura do Google Colab
+
+## Mitigando os "problemas" - Rstudio Cloud
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```

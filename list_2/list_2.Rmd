@@ -196,30 +196,31 @@ saude = tbl(conn, "saude")
 queries = glue('SELECT g.name_health_region,
                        i.cod_saude,
                        i.ibge,
-                       i.nome_saude
+                       COUNT(i.nome_saude) AS N,
+                       MEDIAN(COUNT(i.nome_saude))
                FROM ibge i
-               INNER JOIN geobr g ON g.code_health_region = i.cod_saude
+               LEFT JOIN geobr g ON g.code_health_region = i.cod_saude
                INNER JOIN saude s ON i.ibge = s.estabelecimento_municipio_codigo
+               GROUP BY g.name_health_region
                ')
 
 dados = dbGetQuery(conn, paste(queries, collapse = "UNION ALL\n"))
 
 
-# inner_join(geobr, ibge, by = c('code_health_region' = 'cod_saude')) %>%
-#    inner_join(saude, by = c('ibge' = 'estabelecimento_municipio_codigo')) %>%
-#   group_by(name_health_region) %>%
-#   mutate(N = n()) %>%
-#   summarize( faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
-#   mutate(N = n()) %>%
-#   group_by(faixa) %>%
-#   arrange(N) %>%
-#   slice(1:5) %>%
-#   select(faixa, name_health_region, N) %>%
-#   as_tibble()
-#   show_query()
+left_join(geobr, ibge, by = c('code_health_region' = 'cod_saude')) %>%
+   inner_join(saude, by = c('ibge' = 'estabelecimento_municipio_codigo')) %>%
+  group_by(name_health_region) %>% 
+  summarize(N = n()) %>%
+  mutate(faixa = ifelse(N>=median(N), 'alta', 'baixa')) %>%
+  group_by(faixa) %>%
+  arrange(N) %>%
+  slice(1:5) %>%
+  select(faixa, name_health_region, N) %>%
+  as_tibble()
+  #show_query()
 
 # desconectar
-dbDisconnect(conn)
+#dbDisconnect(conn)
 ```
 
 ### Resolução 1.c)
