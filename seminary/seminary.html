@@ -348,13 +348,28 @@
 <p><a href="https://colab.research.google.com/">Google Colab</a></p>
 </div>
 </div>
-<p><b> São ambas soluções </b></p>
+<p><b> Qual escolher? </b></p>
+</section>
+<section id="tech" class="slide level2">
+<h2>Tech</h2>
+<ul>
+<li>Docker</li>
+<li>Rstudio</li>
+<li>Jupyterlab</li>
+<li>Windows Subsystem for Linux</li>
+</ul>
+</section>
+<section id="docker" class="slide level2">
+<h2>Docker</h2>
+</section>
+<section id="estrutura-do-rstudio-cloud" class="slide level2">
+<h2>Estrutura do Rstudio Cloud</h2>
 </section>
 <section id="rstudio-cloud" class="slide level2">
 <h2>Rstudio Cloud</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="vantagens">Vantagens</h3>
+<h4 id="vantagens">Vantagens</h4>
 <ul>
 <li>No feed/subscription;</li>
 <li>Public web service (RStudio IDE);</li>
@@ -363,33 +378,14 @@
 <li>Persistence;</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<h3 id="desvantagens">Desvantagens</h3>
+<h4 id="desvantagens">Desvantagens</h4>
 <ul>
 <li>Restrição física da máquina (RAM, CPU, HDD);</li>
 <li>Restrição mensal de workload (horas/projeto);</li>
+<li>Escalonamento;</li>
 </ul>
 </div>
 </div>
-</section>
-<section id="google-colab" class="slide level2">
-<h2>Google Colab</h2>
-<p>::: columns ::: {.column width=“50%”} ### Vantagens * No feed/subscription; * Public web service (Jupyterlab IDE); * Compartilhamento; * Suporte a GPU; * Python &amp; R kernels; :::</p>
-<div class="column" style="width:50%;">
-<h3 id="desvantagens-1">Desvantagens</h3>
-<ul>
-<li>Persitência (dados e pacotes)</li>
-<li>Restição física</li>
-</ul>
-</div>
-<p>:::</p>
-</section>
-<section id="google-colab-e-seus-kernels" class="slide level2">
-<h2>Google Colab e seus kernels</h2>
-<p>Podemos optar pela linguagem de programação que iremos usar no</p>
-</section>
-<section id="estrutura-do-rstudio-cloud" class="slide level2">
-<h2>Estrutura do Rstudio Cloud</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
 </section>
 <section id="mitigando-os-problemas---rstudio-cloud" class="slide level2">
 <h2>Mitigando os “problemas” - Rstudio Cloud</h2>
@@ -397,22 +393,64 @@
 <section id="estrutura-do-google-colab" class="slide level2">
 <h2>Estrutura do Google Colab</h2>
 </section>
-<section id="mitigando-os-problemas---rstudio-cloud-1" class="slide level2">
-<h2>Mitigando os “problemas” - Rstudio Cloud</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
+<section id="google-colab" class="slide level2">
+<h2>Google Colab</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="vantagens-1">Vantagens</h3>
 <ul>
-<li>Content authored with markdown</li>
-<li>Output from executable code</li>
+<li>No feed/subscription;</li>
+<li>Public web service (Jupyterlab IDE);</li>
+<li>Compartilhamento;</li>
+<li>Suporte a GPU (plano pago);</li>
+<li>Python &amp; R kernels;</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h4 id="desvantagens-1">Desvantagens</h4>
+<ul>
+<li>Persitência (dados e pacotes)</li>
+<li>Restrição física</li>
+<li>Escalonamento</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="google-colab-e-seus-kernels" class="slide level2">
+<h2>Google Colab e seus kernels</h2>
+<p>Podemos optar pela linguagem de programação que iremos usar no jupyterlab na sessão destinada ao runtime (kernel)</p>
+</section>
+<section id="mitigando-os-problemas---google-colab" class="slide level2">
+<h2>Mitigando os “problemas” - Google Colab</h2>
+<ul>
+<li>Plano pago</li>
+<li>Persistência (via mount do google Drive)</li>
+<li></li>
 </ul>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="solução-customizada" class="slide level2">
+<h2>Solução Customizada????</h2>
+</section>
+<section id="solução-customizada---pequenamédia-escala" class="slide level2">
+<h2>Solução Customizada - Pequena/Média Escala</h2>
+<p>Vamos dar deploy em uma solução customizada usando docker como base para um Rstudio Server!!!!</p>
+<p>Pre-requesitos:<br>
+- Computador com uma configuração razoável (RAM, CPU);<br>
+- Conexão estável com a internet e segura;<br>
+- Energia;</p>
+<p>Vantagens:<br>
+- Web service<br>
+- Configuração do “server” mais robusta<br>
+- Free!!!!!!!!!!</p>
+<p>Desvantagem:<br>
+- “Custo” de manutenção;<br>
+- Curva de aprendizado (bem suavel!!!!!!) - Atualização e manutenção das imagens dos conteiners; - Sistema unificado (todos os usuários no mesmo conteiner)</p>
+</section>
+<section id="deploy-rstudio-server" class="slide level2">
+<h2>Deploy Rstudio Server</h2>
+</section>
+<section id="solução-customizada---pequenamédia-escala-1" class="slide level2">
+<h2>Solução Customizada - Pequena/Média Escala</h2>
+<p>Ilustrando agora uma solução customizada usando docker e jupyterlab (Apenas mostrar funcionando, deploy bastante complexo…)</p>
 
 <img src="www/logo-UnB.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p><a href="http://gmail.com" class="uri">http://gmail.com</a></p>
@@ -631,48 +669,6 @@
         ]
       });
     </script>
-    
-    <script>
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-      // slide changes (different for each slide format).
-      (function () {
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          // dispatch for htmlwidgets
-          const event = window.document.createEvent("Event");
-          event.initEvent("slideenter", true, true);
-          window.document.dispatchEvent(event);
-
-          // dispatch for shiny
-          if (window.jQuery) {
-            if (previousSlide) {
-              window.jQuery(previousSlide).trigger("hidden");
-            }
-            if (currentSlide) {
-              window.jQuery(currentSlide).trigger("shown");
-            }
-          }
-        }
-
-        // hookup for reveal
-        if (window.Reveal) {
-          window.Reveal.addEventListener("slidechanged", function(event) {
-            fireSlideChanged(event.previousSlide, event.currentSlide);
-          });
-        }
-
-        // hookup for slidy
-        if (window.w3c_slidy) {
-          window.w3c_slidy.add_observer(function (slide_num) {
-            // slide_num starts at position 1
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-          });
-        }
-
-      })();
-    </script>
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

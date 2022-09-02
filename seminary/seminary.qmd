@@ -37,14 +37,26 @@ editor: source
 :::
 :::
 
-<b> São ambas soluções </b>
+<b> Qual escolher? </b>
+
+## Tech
+
+* Docker
+* Rstudio
+* Jupyterlab
+* Windows Subsystem for Linux
+
+## Docker
+
+Apresentar o DOCKER!!!!!
+
+## Estrutura do Rstudio Cloud
 
 ## Rstudio Cloud
 
 ::: columns
 ::: {.column width="50%"}
-### Vantagens
-
+#### Vantagens  
 -   No feed/subscription;
 -   Public web service (RStudio IDE);
 -   Compartilhamento
@@ -53,49 +65,73 @@ editor: source
 :::
 
 ::: {.column width="50%"}
-### Desvantagens
-
+#### Desvantagens
 -   Restrição física da máquina (RAM, CPU, HDD);
 -   Restrição mensal de workload (horas/projeto);
+-   Escalonamento;
 :::
 :::
-
-## Google Colab
-
-::: columns ::: {.column width="50%"} \### Vantagens \* No feed/subscription; \* Public web service (Jupyterlab IDE); \* Compartilhamento; \* Suporte a GPU; \* Python & R kernels; :::
-
-::: {.column width="50%"}
-### Desvantagens
-
--   Persitência (dados e pacotes)
--   Restição física
-:::
-
-:::
-
-## Google Colab e seus kernels
-
-Podemos optar pela linguagem de programação que iremos usar no
-
-## Estrutura do Rstudio Cloud
-
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
 
 ## Mitigando os "problemas" - Rstudio Cloud
 
 ## Estrutura do Google Colab
 
-## Mitigando os "problemas" - Rstudio Cloud
+## Google Colab
 
-When you click the **Render** button a document will be generated that includes:
+::: columns 
+::: {.column width="50%"}
+### Vantagens
+-   No feed/subscription; 
+-   Public web service (Jupyterlab IDE); 
+-   Compartilhamento; 
+-   Suporte a GPU (plano pago); 
+-   Python & R kernels;
+:::
 
--   Content authored with markdown
--   Output from executable code
+::: {.column width="50%"}
+#### Desvantagens
+-   Persitência (dados e pacotes)
+-   Restrição física
+-   Escalonamento
+:::
+:::
 
-## Code
+## Google Colab e seus kernels
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+Podemos optar pela linguagem de programação que iremos usar no jupyterlab na sessão destinada ao runtime (kernel)
 
-```{r}
-1 + 1
-```
+
+## Mitigando os "problemas" - Google Colab
+
+-   Plano pago
+-   Persistência (via mount do google Drive)
+-   
+
+## Solução Customizada????
+
+## Solução Customizada - Pequena/Média Escala
+
+Vamos dar deploy em uma solução customizada usando docker como base para um Rstudio Server!!!!
+
+Pre-requesitos:  
+-   Computador com uma configuração razoável (RAM, CPU);  
+-   Conexão estável com a internet e segura;  
+-   Energia;  
+
+Vantagens:  
+-   Web service    
+-   Configuração do "server" mais robusta  
+-   Free!!!!!!!!!!  
+
+Desvantagem:  
+-   "Custo" de manutenção;  
+-   Curva de aprendizado (bem suavel!!!!!!)
+-   Atualização e manutenção das imagens dos conteiners;
+-   Sistema unificado (todos os usuários no mesmo conteiner)
+
+## Deploy Rstudio Server
+
+## Solução Customizada - Pequena/Média Escala
+
+Ilustrando agora uma solução customizada usando docker e jupyterlab
+(Apenas mostrar funcionando, deploy bastante complexo...)
