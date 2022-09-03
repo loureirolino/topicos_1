@@ -26,6 +26,7 @@ format:
     logo: www/logo-UnB.png
     #footer: <http://repo_address> 
 editor: source
+date-format: "DD MMM YYYY"
 ---
 
 ## Início
@@ -81,14 +82,16 @@ editor: source
 * [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) ![](www/logo_wsl.png){width=200px}
 -->
 
+## Tecnologia por Trás
+
 ## Virtual Machines
-[VMs]<https://www.vmware.com/topics/glossary/content/virtual-machine.html>
+
+Leve explicação do que é uma [VM](https://www.vmware.com/topics/glossary/content/virtual-machine.html)
 
 
 ## Docker
 
-Apresentar o DOCKER!!!!!
-[Docker](https://www.docker.com/resources/what-container/)
+Apresentar o [Docker](https://www.docker.com/resources/what-container/)
 
 ## Estrutura do Rstudio Cloud
 
@@ -117,7 +120,9 @@ Apresentar o DOCKER!!!!!
 
 ## Mitigando os "problemas" - Rstudio Cloud
 
+
 ## Estrutura do Google Colab
+
 
 ## Google Colab
 
@@ -143,10 +148,7 @@ Apresentar o DOCKER!!!!!
 
 Podemos optar pela linguagem de programação que iremos usar no jupyterlab na sessão destinada ao runtime (kernel)
 
-
-
 ## Mitigando os "problemas" - Google Colab
-
 
 -   Plano pago
 -   Persistência (via mount do google Drive)
@@ -177,11 +179,7 @@ Desvantagem:
 
 ## Deploy Rstudio Server
 
-## Solução Customizada - Pequena/Média Escala
-
-Ilustrando agora uma solução customizada usando docker e jupyterlab
-(Apenas mostrar funcionando, deploy bastante complexo...)
-
+Add flow chart do processo
 
 ## Solução Customizada - Pequena/Média Escala
 
@@ -201,3 +199,14 @@ Desvantagem:
 -   "Custo" de manutenção;  
 -   Curva de aprendizado (bem suavel!!!!!!)  
 
+## Solução Customizada - Pequena/Média Escala
+
+Ilustrando agora uma solução customizada usando docker e jupyterlab
+(Apenas mostrar funcionando, deploy bastante complexo...)
+
+## Deploy Jupyterhub/Jupyterlab
+
+Add flow chart do processo  
+![<https://speakerdeck.com/jhermann/jupyterhub-and-jupyter-notebook-a-view-under-the-hood>](www/jupyterhub_stack.png){width=200%}
+
+## Conclusão
